@@ -1,36 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { userService } from "../services/userServices";
 
-interface RegisterFormValues {
+export type RegisterFormValues = {
   name: string;
   email: string;
   password: string;
   confirm: string;
+  role: "usuario" | "admin";
+};
+
+interface RegisterFormProps {
+  showRoleField?: boolean;
+  defaultRole?: RegisterFormValues["role"];
+  submitLabel?: string;
+  onSuccess?: () => void;
+  initialValues?: RegisterFormValues;
+  onSubmitForm?: (data: RegisterFormValues) => Promise<void>;
 }
 
 const schema: yup.ObjectSchema<RegisterFormValues> = yup.object({
-  name: yup
-    .string()
-    .required("El nombre es obligatorio")
-    .matches(/^[^\d]+$/, "El nombre no puede contener números"),
-  email: yup
-    .string()
-    .required("El email es obligatorio")
-    .email("El email no es válido"),
-  password: yup
-    .string()
-    .required("La contraseña es obligatoria")
-    .min(6, "La contraseña debe tener al menos 6 caracteres"),
-  confirm: yup
-    .string()
-    .oneOf([yup.ref("password")], "Las contraseñas no coinciden")
-    .required("Repite la contraseña"),
+  name: yup.string().required("El nombre es obligatorio").matches(/^[^\d]+$/, "El nombre no puede contener números"),
+  email: yup.string().required("El email es obligatorio").email("El email no es válido"),
+  password: yup.string().required("La contraseña es obligatoria").min(6, "La contraseña debe tener al menos 6 caracteres"),
+  confirm: yup.string().oneOf([yup.ref("password")], "Las contraseñas no coinciden").required("Repite la contraseña"),
+  role: yup.string().oneOf(["usuario", "admin"]).required(),
 });
 
-const RegisterForm: React.FC = () => {
+const RegisterForm: React.FC<RegisterFormProps> = ({
+  showRoleField = false,
+  defaultRole = "usuario",
+  submitLabel = "Registrarse",
+  onSuccess,
+  initialValues,
+  onSubmitForm,
+}) => {
   const {
     register,
     handleSubmit,
@@ -40,9 +46,14 @@ const RegisterForm: React.FC = () => {
   } = useForm<RegisterFormValues>({
     resolver: yupResolver(schema),
     mode: "onBlur",
+    defaultValues: { role: defaultRole },
   });
 
   const [success, setSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialValues) reset(initialValues);
+  }, [initialValues, reset]);
 
   const getInputClass = (field: keyof RegisterFormValues) => {
     if (errors[field]) return "border-red-500";
@@ -52,21 +63,30 @@ const RegisterForm: React.FC = () => {
 
   const onSubmit = async (data: RegisterFormValues) => {
     setSuccess(null);
-    // Validar email repetido
+
+    if (onSubmitForm) {
+      await onSubmitForm(data);
+      if (onSuccess) onSuccess();
+      return;
+    }
+
     const existing = await userService.getByEmail(data.email);
     if (existing) {
       setError("email", { type: "manual", message: "Este email ya está registrado" });
       return;
     }
-    // Registrar usuario
+
     await userService.create({
       name: data.name,
       email: data.email,
       password: data.password,
-      role: "usuario",
+      role: data.role,
     });
-    setSuccess("¡Registro exitoso!");
-    reset();
+
+    reset({ name: "", email: "", password: "", confirm: "", role: defaultRole });
+
+    if (onSuccess) onSuccess();
+    else setSuccess("¡Registro exitoso!");
   };
 
   return (
@@ -111,12 +131,29 @@ const RegisterForm: React.FC = () => {
         {errors.confirm && <span className="text-red-500 text-sm">{errors.confirm.message}</span>}
       </div>
 
+      {showRoleField ? (
+        <div>
+          <label className="block text-sm font-medium mb-1">Rol</label>
+          <select
+            {...register("role")}
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${getInputClass("role")}`}
+          >
+            <option value="usuario">Usuario</option>
+            <option value="admin">Administrador</option>
+          </select>
+          {errors.role && <span className="text-red-500 text-sm">{errors.role.message}</span>}
+        </div>
+      ) : (
+        <input type="hidden" value={defaultRole} {...register("role")} />
+      )}
+
       <button
         type="submit"
         className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded transition-colors"
       >
-        Registrarse
+        {submitLabel}
       </button>
+
       {success && <div className="text-green-600 text-center">{success}</div>}
     </form>
   );

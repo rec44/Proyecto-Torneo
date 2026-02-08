@@ -4,7 +4,7 @@
       "id": "1",
       "name": "Torneo Primavera",
       "sport": "futbol",
-      "category": "amateur",
+      "category": "Bajo",
       "maxTeams": 12,
       "maxPlayersPerTeam": 11,
       "minPlayersPerTeam": 7,
@@ -24,7 +24,7 @@
       "id": "2",
       "name": "Liga de Baloncesto Verano",
       "sport": "baloncesto",
-      "category": "professional",
+      "category": "Alto",
       "maxTeams": 8,
       "maxPlayersPerTeam": 12,
       "minPlayersPerTeam": 5,
@@ -44,7 +44,7 @@
       "id": "3",
       "name": "Campeonato de Voleibol",
       "sport": "voleibol",
-      "category": "amateur",
+      "category": "Alto",
       "maxTeams": 10,
       "maxPlayersPerTeam": 12,
       "minPlayersPerTeam": 6,
@@ -64,7 +64,7 @@
       "id": "4",
       "name": "Torneo Invierno de Fútbol",
       "sport": "futbol",
-      "category": "youth",
+      "category": "Medio",
       "maxTeams": 16,
       "maxPlayersPerTeam": 11,
       "startDate": "2026-12-01",
@@ -83,7 +83,7 @@
       "id": "5",
       "name": "Basket 3x3 Callejero",
       "sport": "baloncesto",
-      "category": "amateur",
+      "category": "Bajo",
       "maxTeams": 20,
       "maxPlayersPerTeam": 4,
       "startDate": "2026-07-10",
@@ -99,25 +99,6 @@
       "ownerId": 1
     },
     {
-      "id": "6",
-      "name": "Voleibol Playa",
-      "sport": "voleibol",
-      "category": "amateur",
-      "maxTeams": 15,
-      "maxPlayersPerTeam": 6,
-      "startDate": "2026-08-01",
-      "endDate": "2026-08-15",
-      "status": "open",
-      "community": "10",
-      "province": "Alicante",
-      "city": "Alicante",
-      "venue": "Playa del Postiguet",
-      "description": "Torneo de voleibol en la playa para equipos amateurs.",
-      "imageUrl": "https://images.unsplash.com/photo-1508780709619-79562169bc64",
-      "createdAt": "2026-01-17",
-      "ownerId": 1
-    },
-    {
       "id": "8c9e",
       "name": "Basket 3v3",
       "sport": "basketball",
@@ -129,44 +110,70 @@
       "endDate": "2026-02-18",
       "community": "10",
       "province": "Alicante/Alacant",
-      "city": "Benidorm",
-      "venue": "Pabellon Palau",
+      "city": "Alfaz Del Pi",
+      "venue": "Pabellon Pau Gasol",
       "description": "Torneo 3v3 de baloncesto que empezaremos por la tarde a las 17:00",
       "imageUrl": "",
       "status": "open",
       "ownerId": 1,
-      "currentTeams": 0,
       "createdAt": "2026-02-07T20:22:30.631Z"
+    },
+    {
+      "id": "9",
+      "name": "Torneo Otoño 2025",
+      "sport": "futbol",
+      "category": "amateur",
+      "maxTeams": 8,
+      "maxPlayersPerTeam": 11,
+      "minPlayersPerTeam": 7,
+      "startDate": "2025-10-01",
+      "endDate": "2025-10-15",
+      "status": "finished",
+      "community": "10",
+      "province": "Valencia",
+      "city": "Valencia",
+      "venue": "Campo Municipal Oeste",
+      "description": "Torneo ya iniciado y con cupo completo.",
+      "imageUrl": "https://images.unsplash.com/photo-1508261305436-206bc5c3a7bf",
+      "createdAt": "2025-08-20",
+      "ownerId": 2
     }
   ],
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "User",
       "email": "user@example.com",
       "role": "usuario",
       "password": "123456"
     },
     {
-      "id": 2,
+      "id": "c5",
+      "name": "Admin",
+      "email": "admin@example.com",
+      "role": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": "2",
       "name": "Ana García",
       "email": "ana@example.com",
       "role": "admin",
       "password": "123456"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Carlos Ruiz",
       "email": "carlos@example.com",
       "role": "usuario",
       "password": "123456"
     },
     {
-      "id": "c002",
       "name": "Sergio",
       "email": "sergio@example.com",
       "password": "123456",
-      "role": "usuario"
+      "role": "usuario",
+      "id": "c002"
     }
   ],
   "teams": [
@@ -213,346 +220,428 @@
         "Paco Gonzalez",
         "Mariano"
       ]
+    },
+    {
+      "id": "76b4",
+      "name": "Macaquinyos",
+      "tournamentId": "8c9e",
+      "captainId": "c002",
+      "players": [
+        "Sergio",
+        "Manolin",
+        "Paquito"
+      ]
     }
   ],
   "comunidades": [
     {
       "codigo": "01",
-      "nombre": "Andalucia"
+      "nombre": "Andalucia",
+      "id": "eb0f"
     },
     {
       "codigo": "02",
-      "nombre": "Aragón"
+      "nombre": "Aragón",
+      "id": "4aed"
     },
     {
       "codigo": "03",
-      "nombre": "Asturias, Principado de"
+      "nombre": "Asturias, Principado de",
+      "id": "2224"
     },
     {
       "codigo": "04",
-      "nombre": "Balears, Illes"
+      "nombre": "Balears, Illes",
+      "id": "c466"
     },
     {
       "codigo": "05",
-      "nombre": "Canarias"
+      "nombre": "Canarias",
+      "id": "de4b"
     },
     {
       "codigo": "06",
-      "nombre": "Cantabria"
+      "nombre": "Cantabria",
+      "id": "35cb"
     },
     {
       "codigo": "07",
-      "nombre": "Castilla y León"
+      "nombre": "Castilla y León",
+      "id": "1962"
     },
     {
       "codigo": "08",
-      "nombre": "Castilla-La Mancha"
+      "nombre": "Castilla-La Mancha",
+      "id": "f6d4"
     },
     {
       "codigo": "09",
-      "nombre": "Cataluña"
+      "nombre": "Cataluña",
+      "id": "569b"
     },
     {
       "codigo": "10",
-      "nombre": "Comunitat Valenciana"
+      "nombre": "Comunitat Valenciana",
+      "id": "7f5e"
     },
     {
       "codigo": "11",
-      "nombre": "Extremadura"
+      "nombre": "Extremadura",
+      "id": "9f65"
     },
     {
       "codigo": "12",
-      "nombre": "Galicia"
+      "nombre": "Galicia",
+      "id": "7d1e"
     },
     {
       "codigo": "13",
-      "nombre": "Madrid, Comunidad de"
+      "nombre": "Madrid, Comunidad de",
+      "id": "e125"
     },
     {
       "codigo": "14",
-      "nombre": "Murcia, Región de"
+      "nombre": "Murcia, Región de",
+      "id": "dc6a"
     },
     {
       "codigo": "15",
-      "nombre": "Navarra, Comunidad Foral de"
+      "nombre": "Navarra, Comunidad Foral de",
+      "id": "526b"
     },
     {
       "codigo": "16",
-      "nombre": "País Vasco"
+      "nombre": "País Vasco",
+      "id": "b483"
     },
     {
       "codigo": "17",
-      "nombre": "Rioja, La"
+      "nombre": "Rioja, La",
+      "id": "f34f"
     },
     {
       "codigo": "18",
-      "nombre": "Ceuta"
+      "nombre": "Ceuta",
+      "id": "b315"
     },
     {
       "codigo": "19",
-      "nombre": "Melilla"
+      "nombre": "Melilla",
+      "id": "43fe"
     }
   ],
   "provincias": [
     {
       "comunidad": "01",
       "codigo": "04",
-      "nombre": "Almería"
+      "nombre": "Almería",
+      "id": "4158"
     },
     {
       "comunidad": "01",
       "codigo": "11",
-      "nombre": "Cádiz"
+      "nombre": "Cádiz",
+      "id": "40f1"
     },
     {
       "comunidad": "01",
       "codigo": "14",
-      "nombre": "Córdoba"
+      "nombre": "Córdoba",
+      "id": "4f61"
     },
     {
       "comunidad": "01",
       "codigo": "18",
-      "nombre": "Granada"
+      "nombre": "Granada",
+      "id": "fbed"
     },
     {
       "comunidad": "01",
       "codigo": "21",
-      "nombre": "Huelva"
+      "nombre": "Huelva",
+      "id": "0684"
     },
     {
       "comunidad": "01",
       "codigo": "23",
-      "nombre": "Jaen"
+      "nombre": "Jaen",
+      "id": "9c48"
     },
     {
       "comunidad": "01",
       "codigo": "29",
-      "nombre": "Málaga"
+      "nombre": "Málaga",
+      "id": "8643"
     },
     {
       "comunidad": "01",
       "codigo": "41",
-      "nombre": "Sevilla"
+      "nombre": "Sevilla",
+      "id": "f063"
     },
     {
       "comunidad": "02",
       "codigo": "22",
-      "nombre": "Huesca"
+      "nombre": "Huesca",
+      "id": "bb91"
     },
     {
       "comunidad": "02",
       "codigo": "44",
-      "nombre": "Teruel"
+      "nombre": "Teruel",
+      "id": "4a1f"
     },
     {
       "comunidad": "02",
       "codigo": "50",
-      "nombre": "Zaragoza"
+      "nombre": "Zaragoza",
+      "id": "979a"
     },
     {
       "comunidad": "03",
       "codigo": "33",
-      "nombre": "Asturias"
+      "nombre": "Asturias",
+      "id": "25c7"
     },
     {
       "comunidad": "04",
       "codigo": "07",
-      "nombre": "Balears, Illes"
+      "nombre": "Balears, Illes",
+      "id": "e8b3"
     },
     {
       "comunidad": "05",
       "codigo": "35",
-      "nombre": "Palmas, Las"
+      "nombre": "Palmas, Las",
+      "id": "4a32"
     },
     {
       "comunidad": "05",
       "codigo": "38",
-      "nombre": "Santa Cruz de Tenerife"
+      "nombre": "Santa Cruz de Tenerife",
+      "id": "e5bf"
     },
     {
       "comunidad": "06",
       "codigo": "39",
-      "nombre": "Cantabria"
+      "nombre": "Cantabria",
+      "id": "df0d"
     },
     {
       "comunidad": "07",
       "codigo": "05",
-      "nombre": "Ávila"
+      "nombre": "Ávila",
+      "id": "40ce"
     },
     {
       "comunidad": "07",
       "codigo": "09",
-      "nombre": "Burgos"
+      "nombre": "Burgos",
+      "id": "5d76"
     },
     {
       "comunidad": "07",
       "codigo": "24",
-      "nombre": "León"
+      "nombre": "León",
+      "id": "2f57"
     },
     {
       "comunidad": "07",
       "codigo": "34",
-      "nombre": "Palencia"
+      "nombre": "Palencia",
+      "id": "64ad"
     },
     {
       "comunidad": "07",
       "codigo": "37",
-      "nombre": "Salamanca"
+      "nombre": "Salamanca",
+      "id": "76e4"
     },
     {
       "comunidad": "07",
       "codigo": "40",
-      "nombre": "Segovia"
+      "nombre": "Segovia",
+      "id": "1ac6"
     },
     {
       "comunidad": "07",
       "codigo": "42",
-      "nombre": "Soria"
+      "nombre": "Soria",
+      "id": "652f"
     },
     {
       "comunidad": "07",
       "codigo": "47",
-      "nombre": "Valladolid"
+      "nombre": "Valladolid",
+      "id": "9f4c"
     },
     {
       "comunidad": "07",
       "codigo": "49",
-      "nombre": "Zamora"
+      "nombre": "Zamora",
+      "id": "701d"
     },
     {
       "comunidad": "08",
       "codigo": "02",
-      "nombre": "Albacete"
+      "nombre": "Albacete",
+      "id": "47cd"
     },
     {
       "comunidad": "08",
       "codigo": "13",
-      "nombre": "city Real"
+      "nombre": "city Real",
+      "id": "eca4"
     },
     {
       "comunidad": "08",
       "codigo": "16",
-      "nombre": "Cuenca"
+      "nombre": "Cuenca",
+      "id": "cc0f"
     },
     {
       "comunidad": "08",
       "codigo": "19",
-      "nombre": "Guadalajara"
+      "nombre": "Guadalajara",
+      "id": "bd93"
     },
     {
       "comunidad": "08",
       "codigo": "45",
-      "nombre": "Toledo"
+      "nombre": "Toledo",
+      "id": "ac3b"
     },
     {
       "comunidad": "09",
       "codigo": "08",
-      "nombre": "Barcelona"
+      "nombre": "Barcelona",
+      "id": "2550"
     },
     {
       "comunidad": "09",
       "codigo": "17",
-      "nombre": "Girona"
+      "nombre": "Girona",
+      "id": "a02d"
     },
     {
       "comunidad": "09",
       "codigo": "25",
-      "nombre": "Lleida"
+      "nombre": "Lleida",
+      "id": "6f83"
     },
     {
       "comunidad": "09",
       "codigo": "43",
-      "nombre": "Tarragona"
+      "nombre": "Tarragona",
+      "id": "dbea"
     },
     {
       "comunidad": "10",
       "codigo": "03",
-      "nombre": "Alicante/Alacant"
+      "nombre": "Alicante/Alacant",
+      "id": "ed11"
     },
     {
       "comunidad": "10",
       "codigo": "12",
-      "nombre": "Castellón/Castelló"
+      "nombre": "Castellón/Castelló",
+      "id": "53e8"
     },
     {
       "comunidad": "10",
       "codigo": "46",
-      "nombre": "Valencia/València"
+      "nombre": "Valencia/València",
+      "id": "9db7"
     },
     {
       "comunidad": "11",
       "codigo": "06",
-      "nombre": "Badajoz"
+      "nombre": "Badajoz",
+      "id": "8235"
     },
     {
       "comunidad": "11",
       "codigo": "10",
-      "nombre": "Cáceres"
+      "nombre": "Cáceres",
+      "id": "2ed8"
     },
     {
       "comunidad": "12",
       "codigo": "15",
-      "nombre": "Coruña, A"
+      "nombre": "Coruña, A",
+      "id": "431d"
     },
     {
       "comunidad": "12",
       "codigo": "27",
-      "nombre": "Lugo"
+      "nombre": "Lugo",
+      "id": "dc53"
     },
     {
       "comunidad": "12",
       "codigo": "32",
-      "nombre": "Ourense"
+      "nombre": "Ourense",
+      "id": "8905"
     },
     {
       "comunidad": "12",
       "codigo": "36",
-      "nombre": "Pontevedra"
+      "nombre": "Pontevedra",
+      "id": "5b55"
     },
     {
       "comunidad": "13",
       "codigo": "28",
-      "nombre": "Madrid"
+      "nombre": "Madrid",
+      "id": "940c"
     },
     {
       "comunidad": "14",
       "codigo": "30",
-      "nombre": "Murcia"
+      "nombre": "Murcia",
+      "id": "19ab"
     },
     {
       "comunidad": "15",
       "codigo": "31",
-      "nombre": "Navarra"
+      "nombre": "Navarra",
+      "id": "5d0f"
     },
     {
       "comunidad": "16",
       "codigo": "01",
-      "nombre": "Araba/Álava"
+      "nombre": "Araba/Álava",
+      "id": "6b73"
     },
     {
       "comunidad": "16",
       "codigo": "48",
-      "nombre": "Bizkaia"
+      "nombre": "Bizkaia",
+      "id": "090d"
     },
     {
       "comunidad": "16",
       "codigo": "20",
-      "nombre": "Gipuzkoa"
+      "nombre": "Gipuzkoa",
+      "id": "ad48"
     },
     {
       "comunidad": "17",
       "codigo": "26",
-      "nombre": "Rioja, La"
+      "nombre": "Rioja, La",
+      "id": "77a1"
     },
     {
       "comunidad": "18",
       "codigo": "51",
-      "nombre": "Ceuta"
+      "nombre": "Ceuta",
+      "id": "ea3c"
     },
     {
       "comunidad": "19",
       "codigo": "52",
-      "nombre": "Melilla"
+      "nombre": "Melilla",
+      "id": "db60"
     }
   ]
 }

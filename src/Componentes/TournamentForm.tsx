@@ -61,13 +61,16 @@ const defaultValues: FormValues = {
 
 interface Props {
   onSubmit: (data: FormValues) => void;
+  initialValues?: FormValues;
+  submitLabel?: string;
 }
 
-const TournamentForm: React.FC<Props> = ({ onSubmit }) => {
+const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel = "Crear torneo" }) => {
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     resetField,
     formState: { errors },
   } = useForm<FormValues>({
@@ -97,6 +100,10 @@ const TournamentForm: React.FC<Props> = ({ onSubmit }) => {
     resetField("city");
   }, [selectedCommunity, resetField]);
 
+  useEffect(() => {
+    if (initialValues) reset(initialValues);
+  }, [initialValues, reset]);
+
   const getInputClass = (field: keyof FormValues) => {
     if (errors[field]) return "border-red-500";
     if (watch(field) && !errors[field]) return "border-green-500";
@@ -121,9 +128,9 @@ const TournamentForm: React.FC<Props> = ({ onSubmit }) => {
           className={`w-full rounded px-3 py-2 border ${getInputClass("sport")}`}
         >
           <option value="">Selecciona un deporte</option>
-          <option value="football">Fútbol</option>
-          <option value="basketball">Baloncesto</option>
-          <option value="volleyball">Voleibol</option>
+          <option value="Fútbol">Fútbol</option>
+          <option value="Baloncesto">Baloncesto</option>
+          <option value="Voleibol">Voleibol</option>
         </select>
         <span className="text-red-500 text-sm">{errors.sport?.message}</span>
       </div>
@@ -271,7 +278,7 @@ const TournamentForm: React.FC<Props> = ({ onSubmit }) => {
         type="submit"
         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded"
       >
-        Crear torneo
+        {submitLabel}
       </button>
     </form>
   );

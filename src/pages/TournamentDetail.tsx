@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navegacion from "../Componentes/Navegacion";
 import { tournamentService } from "../services/tournamentService";
+import { teamService } from "../services/teamService";
 import { useAuth } from "../hooks/useAuth";
+import { getTournamentStatus } from "../utils/getTournamentStatus";
 import { useTeams } from "../hooks/useTeams";
 import type { Tournament } from "../types/tournament";
+import Swal from "sweetalert2";
 
-const statusMap: Record<Tournament["status"], string> = {
+const statusMap: Record<string, string> = {
   open: "Abierto",
   closed: "Cerrado",
   finished: "Finalizado",
@@ -89,6 +92,48 @@ export default function TournamentDetail() {
     Math.round(((teams?.length || 0) / tournament.maxTeams) * 100)
   );
 
+  const canManage = user && (user.role === "admin" || user.id === tournament.ownerId);
+
+  const handleEditTournament = () => {
+    // Lógica para editar el torneo
+    navigate(`/edit-tournament/${tournament.id}`);
+  };
+
+  const handleDeleteTournament = async () => {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esto eliminará el torneo y todos sus equipos inscritos.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, borrar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        // Borra todos los equipos del torneo
+        const equiposDelTorneo = teams.filter((team) => team.tournamentId === tournament.id);
+        await Promise.all(
+          equiposDelTorneo.map((team) => teamService.delete(team.id))
+        );
+        // Borra el torneo
+        await tournamentService.delete(String(tournament.id));
+        await Swal.fire({
+          icon: "success",
+          title: "Torneo eliminado",
+          text: "El torneo y sus equipos han sido eliminados.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        navigate("/"); // Redirige a la página principal
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Error al eliminar torneo");
+      }
+    }
+  };
+
+  const status = getTournamentStatus(tournament, teams);
+
   return (
     <>
       <Navegacion />
@@ -102,9 +147,9 @@ export default function TournamentDetail() {
               ← Volver
             </button>
             <span
-              className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColorMap[tournament.status]}`}
+              className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColorMap[status]}`}
             >
-              {statusMap[tournament.status]}
+              {statusMap[status]}
             </span>
           </div>
 
@@ -112,7 +157,7 @@ export default function TournamentDetail() {
             <h1 className="text-3xl font-bold mb-2">{tournament.name}</h1>
             <p className="text-gray-600 mb-4">
               Deporte: <span className="font-semibold">{tournament.sport}</span> ·
-              Categoría: <span className="font-semibold">{tournament.category}</span>
+              Nivel: <span className="font-semibold">{tournament.category}</span>
             </p>
             <p className="text-gray-600 mb-2">
               Provincia: <span className="font-semibold">{tournament.province}</span> ·
@@ -176,6 +221,23 @@ export default function TournamentDetail() {
                 {isUserJoined ? "Ya inscrito" : "Unirse"}
               </button>
             </div>
+
+            {canManage && (
+              <div className="flex gap-3 mt-4">
+                <button
+                  onClick={handleEditTournament}
+                  className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={handleDeleteTournament}
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+                >
+                  Eliminar
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -35,7 +35,7 @@ export const tournamentService = {
   },
 
   // Actualizar torneo
-  update: async (id: number, tournament: Tournament): Promise<Tournament> => {
+  update: async (id: string, tournament: Tournament): Promise<Tournament> => {
     const response = await fetch(`${API_URL}/tournaments/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -46,7 +46,7 @@ export const tournamentService = {
   },
 
   // Eliminar torneo
-  delete: async (id: number): Promise<void> => {
+  delete: async (id: string): Promise<void> => {
     const response = await fetch(`${API_URL}/tournaments/${id}`, {
       method: 'DELETE'
     });

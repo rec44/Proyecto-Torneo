@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { getTournamentStatus } from "../utils/getTournamentStatus";
 import { useTeams } from "../hooks/useTeams";
 import type { Tournament } from "../types/tournament";
 
@@ -28,9 +29,10 @@ function formatDate(dateString: string) {
 }
 
 const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
-  const { id, name, sport, maxTeams, status, province, city, imageUrl, startDate } = tournament;
+  const { id, name, sport, maxTeams, province, city, imageUrl, startDate } = tournament;
   const navigate = useNavigate();
   const { teams } = useTeams(id);
+  const status = getTournamentStatus(tournament, teams);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col">

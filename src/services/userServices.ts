@@ -9,7 +9,7 @@ export const userService = {
     return res.json();
   },
 
-  async getById(id: number): Promise<User> {
+  async getById(id: string|undefined): Promise<User> {
     const res = await fetch(`${API_URL}/users/${id}`);
     if (!res.ok) throw new Error("Usuario no encontrado");
     return res.json();
@@ -30,5 +30,20 @@ export const userService = {
     });
     if (!res.ok) throw new Error("Error al crear usuario");
     return res.json();
-  }
+  },
+
+  async delete(id: number | string): Promise<void> {
+    const res = await fetch(`${API_URL}/users/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Error al eliminar usuario");
+  },
+
+  async update(id: number | string, user: Partial<User>): Promise<User> {
+    const res = await fetch(`${API_URL}/users/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
+    });
+    if (!res.ok) throw new Error("Error al actualizar usuario");
+    return res.json();
+  },
 };

@@ -24,4 +24,9 @@ export const teamService = {
     if (!res.ok) throw new Error("Error al crear equipo");
     return res.json();
   },
+
+  async delete(id: string): Promise<void> {
+    const res = await fetch(`${API_URL}/teams/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Error al eliminar equipo");
+  },
 };
