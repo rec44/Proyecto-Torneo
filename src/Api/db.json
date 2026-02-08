@@ -1,0 +1,558 @@
+{
+  "tournaments": [
+    {
+      "id": "1",
+      "name": "Torneo Primavera",
+      "sport": "futbol",
+      "category": "amateur",
+      "maxTeams": 12,
+      "maxPlayersPerTeam": 11,
+      "minPlayersPerTeam": 7,
+      "startDate": "2026-03-10",
+      "endDate": "2026-03-20",
+      "status": "open",
+      "community": "10",
+      "province": "Valencia",
+      "city": "Gandía",
+      "venue": "Polideportivo Municipal",
+      "description": "Torneo de fútbol amateur para equipos locales en primavera.",
+      "imageUrl": "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+      "createdAt": "2026-01-25",
+      "ownerId": 1
+    },
+    {
+      "id": "2",
+      "name": "Liga de Baloncesto Verano",
+      "sport": "baloncesto",
+      "category": "professional",
+      "maxTeams": 8,
+      "maxPlayersPerTeam": 12,
+      "minPlayersPerTeam": 5,
+      "startDate": "2026-06-01",
+      "endDate": "2026-08-31",
+      "status": "open",
+      "community": "13",
+      "province": "Madrid",
+      "city": "Madrid",
+      "venue": "Pabellón Príncipe Felipe",
+      "description": "Liga profesional de baloncesto durante el verano.",
+      "imageUrl": "https://images.unsplash.com/photo-1517649763962-0c623066013b",
+      "createdAt": "2026-01-20",
+      "ownerId": 2
+    },
+    {
+      "id": "3",
+      "name": "Campeonato de Voleibol",
+      "sport": "voleibol",
+      "category": "amateur",
+      "maxTeams": 10,
+      "maxPlayersPerTeam": 12,
+      "minPlayersPerTeam": 6,
+      "startDate": "2026-04-15",
+      "endDate": "2026-05-30",
+      "status": "open",
+      "community": "09",
+      "province": "Barcelona",
+      "city": "Barcelona",
+      "venue": "Poliesportivo Municipal",
+      "description": "Campeonato de voleibol para equipos amateurs.",
+      "imageUrl": "https://images.unsplash.com/photo-1464983953574-0892a716854b",
+      "createdAt": "2026-01-22",
+      "ownerId": 3
+    },
+    {
+      "id": "4",
+      "name": "Torneo Invierno de Fútbol",
+      "sport": "futbol",
+      "category": "youth",
+      "maxTeams": 16,
+      "maxPlayersPerTeam": 11,
+      "startDate": "2026-12-01",
+      "endDate": "2026-12-20",
+      "status": "closed",
+      "community": "01",
+      "province": "Andalucía",
+      "city": "Sevilla",
+      "venue": "Estadio Olímpico de La Cartuja",
+      "description": "Torneo de fútbol juvenil en invierno.",
+      "imageUrl": "https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a",
+      "createdAt": "2026-01-15",
+      "ownerId": 3
+    },
+    {
+      "id": "5",
+      "name": "Basket 3x3 Callejero",
+      "sport": "baloncesto",
+      "category": "amateur",
+      "maxTeams": 20,
+      "maxPlayersPerTeam": 4,
+      "startDate": "2026-07-10",
+      "endDate": "2026-07-12",
+      "status": "open",
+      "community": "10",
+      "province": "Valencia",
+      "city": "Valencia",
+      "venue": "Pista Municipal Centro",
+      "description": "Torneo de baloncesto 3x3 en la calle.",
+      "imageUrl": "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
+      "createdAt": "2026-01-18",
+      "ownerId": 1
+    },
+    {
+      "id": "6",
+      "name": "Voleibol Playa",
+      "sport": "voleibol",
+      "category": "amateur",
+      "maxTeams": 15,
+      "maxPlayersPerTeam": 6,
+      "startDate": "2026-08-01",
+      "endDate": "2026-08-15",
+      "status": "open",
+      "community": "10",
+      "province": "Alicante",
+      "city": "Alicante",
+      "venue": "Playa del Postiguet",
+      "description": "Torneo de voleibol en la playa para equipos amateurs.",
+      "imageUrl": "https://images.unsplash.com/photo-1508780709619-79562169bc64",
+      "createdAt": "2026-01-17",
+      "ownerId": 1
+    },
+    {
+      "id": "8c9e",
+      "name": "Basket 3v3",
+      "sport": "basketball",
+      "category": "medio",
+      "maxTeams": 4,
+      "maxPlayersPerTeam": 4,
+      "minPlayersPerTeam": 3,
+      "startDate": "2026-02-18",
+      "endDate": "2026-02-18",
+      "community": "10",
+      "province": "Alicante/Alacant",
+      "city": "Benidorm",
+      "venue": "Pabellon Palau",
+      "description": "Torneo 3v3 de baloncesto que empezaremos por la tarde a las 17:00",
+      "imageUrl": "",
+      "status": "open",
+      "ownerId": 1,
+      "currentTeams": 0,
+      "createdAt": "2026-02-07T20:22:30.631Z"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "User",
+      "email": "user@example.com",
+      "role": "usuario",
+      "password": "123456"
+    },
+    {
+      "id": 2,
+      "name": "Ana García",
+      "email": "ana@example.com",
+      "role": "admin",
+      "password": "123456"
+    },
+    {
+      "id": 3,
+      "name": "Carlos Ruiz",
+      "email": "carlos@example.com",
+      "role": "usuario",
+      "password": "123456"
+    },
+    {
+      "id": "c002",
+      "name": "Sergio",
+      "email": "sergio@example.com",
+      "password": "123456",
+      "role": "usuario"
+    }
+  ],
+  "teams": [
+    {
+      "id": "t01",
+      "name": "Los Tigres",
+      "tournamentId": "1",
+      "captainId": 1,
+      "players": [
+        "Juan Pérez",
+        "Pedro López",
+        "Luis Gómez"
+      ]
+    },
+    {
+      "id": "t02",
+      "name": "Basket Madrid",
+      "tournamentId": "2",
+      "captainId": 2,
+      "players": [
+        "Ana García",
+        "Carlos Ruiz",
+        "Sergio"
+      ]
+    },
+    {
+      "id": "t03",
+      "name": "Voley Barcelona",
+      "tournamentId": "3",
+      "captainId": 3,
+      "players": [
+        "Carlos Ruiz",
+        "Sergio",
+        "Juan Pérez"
+      ]
+    },
+    {
+      "id": "aa5c",
+      "name": "Los wolfs",
+      "tournamentId": "8c9e",
+      "captainId": 1,
+      "players": [
+        "Sergio Muñoz",
+        "Paco Gonzalez",
+        "Mariano"
+      ]
+    }
+  ],
+  "comunidades": [
+    {
+      "codigo": "01",
+      "nombre": "Andalucia"
+    },
+    {
+      "codigo": "02",
+      "nombre": "Aragón"
+    },
+    {
+      "codigo": "03",
+      "nombre": "Asturias, Principado de"
+    },
+    {
+      "codigo": "04",
+      "nombre": "Balears, Illes"
+    },
+    {
+      "codigo": "05",
+      "nombre": "Canarias"
+    },
+    {
+      "codigo": "06",
+      "nombre": "Cantabria"
+    },
+    {
+      "codigo": "07",
+      "nombre": "Castilla y León"
+    },
+    {
+      "codigo": "08",
+      "nombre": "Castilla-La Mancha"
+    },
+    {
+      "codigo": "09",
+      "nombre": "Cataluña"
+    },
+    {
+      "codigo": "10",
+      "nombre": "Comunitat Valenciana"
+    },
+    {
+      "codigo": "11",
+      "nombre": "Extremadura"
+    },
+    {
+      "codigo": "12",
+      "nombre": "Galicia"
+    },
+    {
+      "codigo": "13",
+      "nombre": "Madrid, Comunidad de"
+    },
+    {
+      "codigo": "14",
+      "nombre": "Murcia, Región de"
+    },
+    {
+      "codigo": "15",
+      "nombre": "Navarra, Comunidad Foral de"
+    },
+    {
+      "codigo": "16",
+      "nombre": "País Vasco"
+    },
+    {
+      "codigo": "17",
+      "nombre": "Rioja, La"
+    },
+    {
+      "codigo": "18",
+      "nombre": "Ceuta"
+    },
+    {
+      "codigo": "19",
+      "nombre": "Melilla"
+    }
+  ],
+  "provincias": [
+    {
+      "comunidad": "01",
+      "codigo": "04",
+      "nombre": "Almería"
+    },
+    {
+      "comunidad": "01",
+      "codigo": "11",
+      "nombre": "Cádiz"
+    },
+    {
+      "comunidad": "01",
+      "codigo": "14",
+      "nombre": "Córdoba"
+    },
+    {
+      "comunidad": "01",
+      "codigo": "18",
+      "nombre": "Granada"
+    },
+    {
+      "comunidad": "01",
+      "codigo": "21",
+      "nombre": "Huelva"
+    },
+    {
+      "comunidad": "01",
+      "codigo": "23",
+      "nombre": "Jaen"
+    },
+    {
+      "comunidad": "01",
+      "codigo": "29",
+      "nombre": "Málaga"
+    },
+    {
+      "comunidad": "01",
+      "codigo": "41",
+      "nombre": "Sevilla"
+    },
+    {
+      "comunidad": "02",
+      "codigo": "22",
+      "nombre": "Huesca"
+    },
+    {
+      "comunidad": "02",
+      "codigo": "44",
+      "nombre": "Teruel"
+    },
+    {
+      "comunidad": "02",
+      "codigo": "50",
+      "nombre": "Zaragoza"
+    },
+    {
+      "comunidad": "03",
+      "codigo": "33",
+      "nombre": "Asturias"
+    },
+    {
+      "comunidad": "04",
+      "codigo": "07",
+      "nombre": "Balears, Illes"
+    },
+    {
+      "comunidad": "05",
+      "codigo": "35",
+      "nombre": "Palmas, Las"
+    },
+    {
+      "comunidad": "05",
+      "codigo": "38",
+      "nombre": "Santa Cruz de Tenerife"
+    },
+    {
+      "comunidad": "06",
+      "codigo": "39",
+      "nombre": "Cantabria"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "05",
+      "nombre": "Ávila"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "09",
+      "nombre": "Burgos"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "24",
+      "nombre": "León"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "34",
+      "nombre": "Palencia"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "37",
+      "nombre": "Salamanca"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "40",
+      "nombre": "Segovia"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "42",
+      "nombre": "Soria"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "47",
+      "nombre": "Valladolid"
+    },
+    {
+      "comunidad": "07",
+      "codigo": "49",
+      "nombre": "Zamora"
+    },
+    {
+      "comunidad": "08",
+      "codigo": "02",
+      "nombre": "Albacete"
+    },
+    {
+      "comunidad": "08",
+      "codigo": "13",
+      "nombre": "city Real"
+    },
+    {
+      "comunidad": "08",
+      "codigo": "16",
+      "nombre": "Cuenca"
+    },
+    {
+      "comunidad": "08",
+      "codigo": "19",
+      "nombre": "Guadalajara"
+    },
+    {
+      "comunidad": "08",
+      "codigo": "45",
+      "nombre": "Toledo"
+    },
+    {
+      "comunidad": "09",
+      "codigo": "08",
+      "nombre": "Barcelona"
+    },
+    {
+      "comunidad": "09",
+      "codigo": "17",
+      "nombre": "Girona"
+    },
+    {
+      "comunidad": "09",
+      "codigo": "25",
+      "nombre": "Lleida"
+    },
+    {
+      "comunidad": "09",
+      "codigo": "43",
+      "nombre": "Tarragona"
+    },
+    {
+      "comunidad": "10",
+      "codigo": "03",
+      "nombre": "Alicante/Alacant"
+    },
+    {
+      "comunidad": "10",
+      "codigo": "12",
+      "nombre": "Castellón/Castelló"
+    },
+    {
+      "comunidad": "10",
+      "codigo": "46",
+      "nombre": "Valencia/València"
+    },
+    {
+      "comunidad": "11",
+      "codigo": "06",
+      "nombre": "Badajoz"
+    },
+    {
+      "comunidad": "11",
+      "codigo": "10",
+      "nombre": "Cáceres"
+    },
+    {
+      "comunidad": "12",
+      "codigo": "15",
+      "nombre": "Coruña, A"
+    },
+    {
+      "comunidad": "12",
+      "codigo": "27",
+      "nombre": "Lugo"
+    },
+    {
+      "comunidad": "12",
+      "codigo": "32",
+      "nombre": "Ourense"
+    },
+    {
+      "comunidad": "12",
+      "codigo": "36",
+      "nombre": "Pontevedra"
+    },
+    {
+      "comunidad": "13",
+      "codigo": "28",
+      "nombre": "Madrid"
+    },
+    {
+      "comunidad": "14",
+      "codigo": "30",
+      "nombre": "Murcia"
+    },
+    {
+      "comunidad": "15",
+      "codigo": "31",
+      "nombre": "Navarra"
+    },
+    {
+      "comunidad": "16",
+      "codigo": "01",
+      "nombre": "Araba/Álava"
+    },
+    {
+      "comunidad": "16",
+      "codigo": "48",
+      "nombre": "Bizkaia"
+    },
+    {
+      "comunidad": "16",
+      "codigo": "20",
+      "nombre": "Gipuzkoa"
+    },
+    {
+      "comunidad": "17",
+      "codigo": "26",
+      "nombre": "Rioja, La"
+    },
+    {
+      "comunidad": "18",
+      "codigo": "51",
+      "nombre": "Ceuta"
+    },
+    {
+      "comunidad": "19",
+      "codigo": "52",
+      "nombre": "Melilla"
+    }
+  ]
+}

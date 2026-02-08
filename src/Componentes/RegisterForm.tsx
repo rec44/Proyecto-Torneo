@@ -1,0 +1,125 @@
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { userService } from "../services/userServices";
+
+interface RegisterFormValues {
+  name: string;
+  email: string;
+  password: string;
+  confirm: string;
+}
+
+const schema: yup.ObjectSchema<RegisterFormValues> = yup.object({
+  name: yup
+    .string()
+    .required("El nombre es obligatorio")
+    .matches(/^[^\d]+$/, "El nombre no puede contener números"),
+  email: yup
+    .string()
+    .required("El email es obligatorio")
+    .email("El email no es válido"),
+  password: yup
+    .string()
+    .required("La contraseña es obligatoria")
+    .min(6, "La contraseña debe tener al menos 6 caracteres"),
+  confirm: yup
+    .string()
+    .oneOf([yup.ref("password")], "Las contraseñas no coinciden")
+    .required("Repite la contraseña"),
+});
+
+const RegisterForm: React.FC = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, touchedFields },
+    setError,
+    reset,
+  } = useForm<RegisterFormValues>({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+  });
+
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const getInputClass = (field: keyof RegisterFormValues) => {
+    if (errors[field]) return "border-red-500";
+    if (touchedFields[field] && !errors[field]) return "border-green-500";
+    return "border-gray-300";
+  };
+
+  const onSubmit = async (data: RegisterFormValues) => {
+    setSuccess(null);
+    // Validar email repetido
+    const existing = await userService.getByEmail(data.email);
+    if (existing) {
+      setError("email", { type: "manual", message: "Este email ya está registrado" });
+      return;
+    }
+    // Registrar usuario
+    await userService.create({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: "usuario",
+    });
+    setSuccess("¡Registro exitoso!");
+    reset();
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium mb-1">Nombre</label>
+        <input
+          type="text"
+          {...register("name")}
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${getInputClass("name")}`}
+        />
+        {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1">Email</label>
+        <input
+          type="email"
+          {...register("email")}
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${getInputClass("email")}`}
+        />
+        {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1">Contraseña</label>
+        <input
+          type="password"
+          {...register("password")}
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${getInputClass("password")}`}
+        />
+        {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1">Repetir contraseña</label>
+        <input
+          type="password"
+          {...register("confirm")}
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${getInputClass("confirm")}`}
+        />
+        {errors.confirm && <span className="text-red-500 text-sm">{errors.confirm.message}</span>}
+      </div>
+
+      <button
+        type="submit"
+        className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded transition-colors"
+      >
+        Registrarse
+      </button>
+      {success && <div className="text-green-600 text-center">{success}</div>}
+    </form>
+  );
+};
+
+export default RegisterForm;
