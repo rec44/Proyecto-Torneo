@@ -5,6 +5,7 @@ import type { User } from "../types/user";
 interface AuthContextValue {
   user: User | null;
   error: string | null;
+  loading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   findUserByEmail: (email: string) => Promise<User | null>;
@@ -16,8 +17,8 @@ const STORAGE_KEY = "auth:user";
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Cargar sesión desde localStorage
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -28,6 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem(STORAGE_KEY);
       }
     }
+    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -55,7 +57,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, error, login, logout, findUserByEmail }}>
+    <AuthContext.Provider
+      value={{ user, error, loading, login, logout, findUserByEmail }}
+    >
       {children}
     </AuthContext.Provider>
   );

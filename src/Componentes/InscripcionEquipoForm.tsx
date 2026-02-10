@@ -1,16 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { teamService } from "../services/teamService";
 import type { Tournament } from "../types/tournament";
+import type { Team } from "../types/team";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 interface Props {
   tournament: Tournament;
   onSuccess?: () => void;
+  team?: Team;
+  submitLabel?: string;
+  mode?: "create" | "edit";
 }
 
-export default function InscripcionEquipoForm({ tournament, onSuccess }: Props) {
+export default function InscripcionEquipoForm({
+  tournament,
+  onSuccess,
+  team,
+  submitLabel,
+  mode = "create",
+}: Props) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [teamName, setTeamName] = useState("");
@@ -18,6 +28,17 @@ export default function InscripcionEquipoForm({ tournament, onSuccess }: Props) 
   const [error, setError] = useState<string | null>(null);
   const max = tournament.maxPlayersPerTeam;
   const min = tournament.minPlayersPerTeam;
+
+  const isEdit = mode === "edit" || Boolean(team);
+
+  useEffect(() => {
+    if (team) {
+      setTeamName(team.name);
+      setPlayers(team.players.length ? team.players : [""]);
+    }
+  }, [team]);
+
+  const finalSubmitLabel = submitLabel ?? (isEdit ? "Guardar cambios" : "Inscribir equipo");
 
   const handlePlayerChange = (idx: number, value: string) => {
     const updated = [...players];
@@ -36,7 +57,6 @@ export default function InscripcionEquipoForm({ tournament, onSuccess }: Props) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
     const cleanPlayers = players.map(p => p.trim()).filter(Boolean);
 
     if (!teamName.trim()) {
@@ -53,23 +73,38 @@ export default function InscripcionEquipoForm({ tournament, onSuccess }: Props) 
     }
 
     try {
-      await teamService.create({
-        name: teamName.trim(),
-        tournamentId: tournament.id,
-        captainId: user!.id,
-        players: cleanPlayers,
-      });
-      Swal.fire({
-        icon: "success",
-        title: "¡Equipo inscrito correctamente!",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
+      if (isEdit && team) {
+        await teamService.update(team.id, {
+          name: teamName.trim(),
+          players: cleanPlayers,
+          tournamentId: team.tournamentId, // Mantiene el torneo
+          captainId: team.captainId,       // Mantiene el capitán
+        });
+        await Swal.fire({
+          icon: "success",
+          title: "Equipo actualizado",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        onSuccess?.();
+      } else {
+        await teamService.create({
+          name: teamName.trim(),
+          tournamentId: tournament.id,
+          captainId: user!.id,
+          players: cleanPlayers,
+        });
+        await Swal.fire({
+          icon: "success",
+          title: "¡Equipo inscrito correctamente!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         navigate(`/MyTournaments/${user!.id}`);
-      });
-      if (onSuccess) onSuccess();
+        onSuccess?.();
+      }
     } catch {
-      setError("Error al inscribir el equipo.");
+      setError(isEdit ? "Error al actualizar el equipo." : "Error al inscribir el equipo.");
     }
   };
 
@@ -123,9 +158,9 @@ export default function InscripcionEquipoForm({ tournament, onSuccess }: Props) 
       </div>
       <button
         type="submit"
-        className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded"
+        className={`w-full ${isEdit ? "bg-yellow-600 hover:bg-yellow-700" : "bg-green-600 hover:bg-green-700"} text-white font-semibold py-2 rounded`}
       >
-        Inscribir equipo
+        {finalSubmitLabel}
       </button>
     </form>
   );

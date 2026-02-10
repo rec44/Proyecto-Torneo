@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
-import TournamentDetail from "../pages/TournamentDetail";
+import TournamentDetail from "../pages/TournamentDetailPage";
 import CreateTournamentPage from "../pages/CreateTournamentPage";
 import HomePage from "../pages/HomePage"; 
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -13,6 +13,8 @@ import EditTournamentPage from "../pages/EditTournamentPage";
 import CreateUserPage from "../pages/admin/CreateUserPage";
 import { AdminRoute } from "./AdminRoute";
 import EditUserPage from "../pages/admin/EditUserPage";
+import TournamentBracketsPage from "../pages/TournamentBracketsPage";
+import EditTeam from "../pages/EditTeamPage";
 
 export default function AppRoutes() {
   return (
@@ -28,6 +30,8 @@ export default function AppRoutes() {
         <Route path="/MyProfile" element={<MyProfilePage />} />
         <Route path="/inscribir/:id" element={<InscripcionEquipoPage />} />
         <Route path="/edit-tournament/:id" element={<EditTournamentPage />} />
+        <Route path="/tournamentBracket/:id" element={<TournamentBracketsPage />} />
+        <Route path="/edit-team/:id" element={<EditTeam />} />
 
         {/* Rutas solo para admin */}
         <Route element={<AdminRoute />}>

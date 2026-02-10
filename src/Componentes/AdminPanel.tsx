@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { User } from "../types/user";
 import type { Tournament } from "../types/tournament";
 import type { Team } from "../types/team";
@@ -165,12 +165,27 @@ const AdminPanel: React.FC<Props> = ({
                 <tr key={team.id}>
                   <td>{team.id}</td>
                   <td>{team.name}</td>
-                  <td>{team.tournamentId}</td>
+                  <td>
+                    <Link
+                      to={`/tournament/${team.tournamentId}`}
+                      className="text-blue-600 underline hover:text-blue-800"
+                    >
+                      {team.tournamentId}
+                    </Link>
+                  </td>
                   <td>{team.captainId}</td>
                   <td>{team.players.join(", ")}</td>
                   <td>
-                    <button className="text-blue-600 mr-2" onClick={()=>navigate(`admin/edit-team`)}>Editar</button>
-                    <button className="text-red-600" onClick={() => onDeleteTeam(team.id)}>
+                    <button
+                      className="text-blue-600 mr-2"
+                      onClick={() => navigate(`/admin/edit-team/${team.id}`)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="text-red-600"
+                      onClick={() => onDeleteTeam(team.id)}
+                    >
                       Eliminar
                     </button>
                   </td>
@@ -178,7 +193,6 @@ const AdminPanel: React.FC<Props> = ({
               ))}
             </tbody>
           </table>
-          <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={()=>navigate("/admin/create-team")}>Crear equipo</button>
         </section>
       )}
     </div>

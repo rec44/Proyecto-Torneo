@@ -29,4 +29,20 @@ export const teamService = {
     const res = await fetch(`${API_URL}/teams/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("Error al eliminar equipo");
   },
+
+  async update(id: string, team: Partial<Team>): Promise<Team> {
+    const res = await fetch(`${API_URL}/teams/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(team),
+    });
+    if (!res.ok) throw new Error("Error al actualizar equipo");
+    return res.json();
+  },
+
+  async getById(id: string): Promise<Team | null> {
+    const res = await fetch(`${API_URL}/teams/${id}`);
+    if (!res.ok) return null;
+    return res.json();
+  },
 };

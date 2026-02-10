@@ -4,11 +4,13 @@ import { useTournaments } from "../hooks/useTournaments";
 import { useEffect, useState } from "react";
 import { teamService } from "../services/teamService";
 import type { Team } from "../types/team";
+import { useNavigate } from "react-router-dom";
 
 export default function MyTournamentsPage() {
   const { user } = useAuth();
   const { tournaments } = useTournaments();
   const [myTeams, setMyTeams] = useState<Team[]>([]);
+  const navigate = useNavigate();
 
   // Torneos creados por el usuario
   const createdTournaments = tournaments.filter(t => t.ownerId === user?.id);
@@ -41,10 +43,18 @@ export default function MyTournamentsPage() {
           ) : (
             <ul className="space-y-4 mb-8">
               {createdTournaments.map(t => (
-                <li key={t.id} className="border rounded-lg p-4 bg-blue-50">
-                  <div className="font-semibold text-lg">{t.name}</div>
-                  <div className="text-sm text-gray-600">{t.city} - {t.sport}</div>
-                  <div className="text-xs text-gray-400">Inicio: {t.startDate} | Fin: {t.endDate}</div>
+                <li key={t.id} className="border rounded-lg p-4 bg-blue-50 flex flex-col md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <div className="font-semibold text-lg">{t.name}</div>
+                    <div className="text-sm text-gray-600">{t.city} - {t.sport}</div>
+                    <div className="text-xs text-gray-400">Inicio: {t.startDate} | Fin: {t.endDate}</div>
+                  </div>
+                  <button
+                    className="mt-2 md:mt-0 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+                    onClick={() => navigate(`/tournamentBracket/${t.id}`)}
+                  >
+                    Ver brackets
+                  </button>
                 </li>
               ))}
             </ul>
@@ -57,10 +67,18 @@ export default function MyTournamentsPage() {
           ) : (
             <ul className="space-y-4">
               {joinedTournaments.map(t => (
-                <li key={t.id} className="border rounded-lg p-4 bg-green-50">
-                  <div className="font-semibold text-lg">{t.name}</div>
-                  <div className="text-sm text-gray-600">{t.city} - {t.sport}</div>
-                  <div className="text-xs text-gray-400">Inicio: {t.startDate} | Fin: {t.endDate}</div>
+                <li key={t.id} className="border rounded-lg p-4 bg-green-50 flex flex-col md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <div className="font-semibold text-lg">{t.name}</div>
+                    <div className="text-sm text-gray-600">{t.city} - {t.sport}</div>
+                    <div className="text-xs text-gray-400">Inicio: {t.startDate} | Fin: {t.endDate}</div>
+                  </div>
+                  <button
+                    className="mt-2 md:mt-0 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+                    onClick={() => navigate(`/tournamentBracket/${t.id}`)}
+                  >
+                    Ver brackets
+                  </button>
                 </li>
               ))}
             </ul>
