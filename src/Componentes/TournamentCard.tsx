@@ -12,12 +12,14 @@ const statusMap: Record<string, string> = {
   open: "Abierto",
   closed: "Cerrado",
   finished: "Finalizado",
+  inprogress: "En curso",
 };
 
 const statusColorMap: Record<string, string> = {
   open: "bg-green-200 text-green-800",
   closed: "bg-red-200 text-red-800",
   finished: "bg-gray-200 text-gray-800",
+  inprogress: "bg-blue-200 text-blue-800",
 };
 
 function formatDate(dateString: string) {
@@ -29,20 +31,13 @@ function formatDate(dateString: string) {
 }
 
 const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
-  const { id, name, sport, maxTeams, province, city, imageUrl, startDate } = tournament;
+  const { id, name, sport, maxTeams, province, city, startDate, category } = tournament;
   const navigate = useNavigate();
   const { teams } = useTeams(id);
   const status = getTournamentStatus(tournament, teams);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col">
-      {imageUrl && (
-        <img
-          src={imageUrl}
-          alt={name}
-          className="w-full h-40 object-cover rounded-md mb-4"
-        />
-      )}
       <h2 className="text-xl font-bold mb-2">{name}</h2>
       <p className="text-gray-600 mb-2">
         Deporte: <span className="font-semibold">{sport}</span>
@@ -55,6 +50,9 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
       </p>
       <p className="text-gray-600 mb-4">
         Equipos: {teams?.length || 0}/{maxTeams}
+      </p>
+       <p className="text-gray-600 mb-4">
+        Nivel: {category}
       </p>
       <div className="flex justify-between items-center mt-auto">
         <span

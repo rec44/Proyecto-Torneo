@@ -6,12 +6,14 @@ const statusMap: Record<string, string> = {
   open: "Abierto",
   closed: "Cerrado",
   finished: "Finalizado",
+  inprogress: "En curso",
 };
 
 const statusColorMap: Record<string, string> = {
   open: "bg-green-200 text-green-800",
   closed: "bg-red-200 text-red-800",
   finished: "bg-gray-200 text-gray-800",
+  inprogress: "bg-blue-200 text-blue-800",
 };
 
 function formatDate(dateString: string) {
@@ -28,22 +30,24 @@ interface Props {
   canEdit?: boolean;
   canDelete?: boolean;
   canJoin?: boolean;
-  isUserJoined?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
   onJoin?: () => void;
+  showViewButton?: boolean;
+  showBracketsButton?: boolean;
+  isUserJoined?: boolean;
 }
 
 export default function TournamentDetail({
   tournament,
   teams,
-  canEdit = false,
-  canDelete = false,
-  canJoin = false,
-  isUserJoined = false,
+  canEdit,
+  canDelete,
+  canJoin,
   onEdit,
   onDelete,
   onJoin,
+  isUserJoined,
 }: Props) {
   const progress = Math.min(
     100,
@@ -128,21 +132,27 @@ export default function TournamentDetail({
         </ul>
       </div>
 
-      {/* Botones de acción */}
       <div className="flex gap-3 mt-6">
         {canJoin && (
-          <button
-            disabled={isUserJoined}
-            onClick={onJoin}
-            className={`px-5 py-2 rounded font-semibold transition-colors ${
-              isUserJoined
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
-            }`}
-          >
-            {isUserJoined ? "Ya inscrito" : "Unirse"}
-          </button>
+          isUserJoined ? (
+            <span className="px-5 py-2 rounded font-semibold bg-gray-200 text-gray-600 cursor-not-allowed">
+              Ya te has unido
+            </span>
+          ) : (
+            <button
+              disabled={status === "inprogress"}
+              onClick={onJoin}
+              className={`px-5 py-2 rounded font-semibold transition-colors ${
+                status === "inprogress"
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
+              }`}
+            >
+              Unirse
+            </button>
+          )
         )}
+
         {canEdit && (
           <button
             onClick={onEdit}
@@ -151,6 +161,7 @@ export default function TournamentDetail({
             Editar
           </button>
         )}
+
         {canDelete && (
           <button
             onClick={onDelete}

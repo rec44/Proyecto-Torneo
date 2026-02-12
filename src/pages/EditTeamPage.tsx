@@ -4,6 +4,7 @@ import Navegacion from "../Componentes/Navegacion";
 import InscripcionEquipoForm from "../Componentes/InscripcionEquipoForm";
 import { teamService } from "../services/teamService";
 import { tournamentService } from "../services/tournamentService";
+import { useTeams } from "../hooks/useTeams"; // <-- Importa el hook
 import type { Team } from "../types/team";
 import type { Tournament } from "../types/tournament";
 
@@ -14,6 +15,7 @@ export default function EditTeam() {
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { teams, loading: loadingTeams } = useTeams(); // <-- Usa el hook
 
   useEffect(() => {
     async function load() {
@@ -36,7 +38,7 @@ export default function EditTeam() {
     load();
   }, [id]);
 
-  if (loading) {
+  if (loading || loadingTeams) {
     return (
       <>
         <Navegacion />
@@ -65,6 +67,7 @@ export default function EditTeam() {
           <InscripcionEquipoForm
             tournament={tournament}
             team={team}
+            equiposInscritos={teams.filter(eq => eq.tournamentId === tournament.id)}
             mode="edit"
             submitLabel="Guardar cambios"
             onSuccess={() => navigate(-1)}

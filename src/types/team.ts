@@ -2,6 +2,6 @@ export interface Team {
   id: string;
   name: string;
   tournamentId: string;
-  captainId: number;
+  captainId: string;
   players: string[];
 }

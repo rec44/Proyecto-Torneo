@@ -1,5 +1,6 @@
 import Navegacion from "../Componentes/Navegacion";
 import { useAuth } from "../hooks/useAuth";
+import UserMatchHistory from "../Componentes/UserMatchHistory";
 
 export default function MyProfilePage() {
   const { user } = useAuth();
@@ -26,6 +27,10 @@ export default function MyProfilePage() {
               </span>
             </div>
           </div>
+        </div>
+        {/* Historial de partidos del usuario */}
+        <div className="max-w-4xl mx-auto mt-8">
+          {user && <UserMatchHistory userId={user.id} />}
         </div>
       </div>
     </>

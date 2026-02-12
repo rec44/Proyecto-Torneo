@@ -129,6 +129,7 @@ export default function TournamentDetailPage() {
             onEdit={handleEditTournament}
             onDelete={handleDeleteTournament}
             onJoin={() => navigate(`/inscribir/${tournament.id}`)}
+            showViewButton={true}
           />
         </div>
       </div>

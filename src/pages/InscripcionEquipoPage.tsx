@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom";
 import { useTournaments } from "../hooks/useTournaments";
+import { useTeams } from "../hooks/useTeams"; // <-- Importa tu hook de equipos
 import InscripcionEquipoForm from "../Componentes/InscripcionEquipoForm";
 import Navegacion from "../Componentes/Navegacion";
 
 export default function InscripcionEquipoPage() {
   const { id } = useParams();
-  const { tournaments, loading } = useTournaments();
+  const { tournaments, loading: loadingTournaments } = useTournaments();
+  const { teams, loading: loadingTeams } = useTeams(); // <-- Usa el hook
 
   const torneo = tournaments.find(t => t.id === id);
 
-  if (loading) {
+  if (loadingTournaments || loadingTeams) {
     return (
       <>
         <Navegacion />
@@ -39,7 +41,11 @@ export default function InscripcionEquipoPage() {
           <h1 className="text-2xl font-bold text-center text-blue-700 mb-6">
             Inscripción de equipo en "{torneo.name}"
           </h1>
-          <InscripcionEquipoForm tournament={torneo} />
+          <InscripcionEquipoForm
+            tournament={torneo}
+            equiposInscritos={teams.filter(eq => eq.tournamentId === torneo.id)}
+            // ...otras props
+          />
         </div>
       </div>
     </>

@@ -16,7 +16,6 @@
       "city": "Gandía",
       "venue": "Polideportivo Municipal",
       "description": "Torneo de fútbol amateur para equipos locales en primavera.",
-      "imageUrl": "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
       "createdAt": "2026-01-25",
       "ownerId": 1
     },
@@ -36,7 +35,6 @@
       "city": "Madrid",
       "venue": "Pabellón Príncipe Felipe",
       "description": "Liga profesional de baloncesto durante el verano.",
-      "imageUrl": "https://images.unsplash.com/photo-1517649763962-0c623066013b",
       "createdAt": "2026-01-20",
       "ownerId": 2
     },
@@ -56,7 +54,6 @@
       "city": "Barcelona",
       "venue": "Poliesportivo Municipal",
       "description": "Campeonato de voleibol para equipos amateurs.",
-      "imageUrl": "https://images.unsplash.com/photo-1464983953574-0892a716854b",
       "createdAt": "2026-01-22",
       "ownerId": 3
     },
@@ -75,7 +72,6 @@
       "city": "Sevilla",
       "venue": "Estadio Olímpico de La Cartuja",
       "description": "Torneo de fútbol juvenil en invierno.",
-      "imageUrl": "https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a",
       "createdAt": "2026-01-15",
       "ownerId": 3
     },
@@ -94,7 +90,6 @@
       "city": "Valencia",
       "venue": "Pista Municipal Centro",
       "description": "Torneo de baloncesto 3x3 en la calle.",
-      "imageUrl": "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
       "createdAt": "2026-01-18",
       "ownerId": 1
     },
@@ -113,7 +108,6 @@
       "city": "Alfaz Del Pi",
       "venue": "Pabellon Pau Gasol",
       "description": "Torneo 3v3 de baloncesto que empezaremos por la tarde a las 17:00",
-      "imageUrl": "",
       "status": "open",
       "ownerId": 1,
       "createdAt": "2026-02-07T20:22:30.631Z"
@@ -134,7 +128,6 @@
       "city": "Valencia",
       "venue": "Campo Municipal Oeste",
       "description": "Torneo ya iniciado y con cupo completo.",
-      "imageUrl": "https://images.unsplash.com/photo-1508261305436-206bc5c3a7bf",
       "createdAt": "2025-08-20",
       "ownerId": 2
     },
@@ -153,7 +146,6 @@
       "city": "Benidorm",
       "venue": "Pabellon Palau",
       "description": "Torneo de futbol sala tarde",
-      "imageUrl": "",
       "status": "open",
       "ownerId": "c002",
       "currentTeams": 0,
@@ -243,15 +235,6 @@
       ]
     },
     {
-      "name": "Macaquinyo",
-      "players": [
-        "Sergio Muñoz",
-        "Biwash Svedye",
-        "Manolin cuco"
-      ],
-      "id": "a401"
-    },
-    {
       "name": "Macacos",
       "players": [
         "Sergio Muñoz",
@@ -261,6 +244,93 @@
       "tournamentId": "8c9e",
       "captainId": "c002",
       "id": "1267"
+    },
+    {
+      "id": "d9fb",
+      "name": "Anonimus",
+      "tournamentId": "8c9e",
+      "captainId": "1",
+      "players": [
+        "Paco gonzalez",
+        "Maradona",
+        "Messi"
+      ]
+    },
+    {
+      "id": "73ec",
+      "name": "Los pacos",
+      "tournamentId": "0f41",
+      "captainId": "c002",
+      "players": [
+        "Sergio Muñoz",
+        "Fernando Caferrata",
+        "Corey Morales",
+        "Tony Tran",
+        "Mariano moreno"
+      ]
+    },
+    {
+      "name": "Los mariachis",
+      "players": [
+        "User",
+        "macdonal",
+        "maripili",
+        "eustaquio",
+        "florentino"
+      ],
+      "tournamentId": "0f41",
+      "captainId": "1",
+      "id": "d5b5"
+    },
+    {
+      "id": "04c1",
+      "name": "el admin",
+      "tournamentId": "0f41",
+      "captainId": "c5",
+      "players": [
+        "Admin",
+        "roberto",
+        "q",
+        "d",
+        "g"
+      ]
+    },
+    {
+      "id": "ba04",
+      "name": "Los patos",
+      "tournamentId": "2",
+      "captainId": "c002",
+      "players": [
+        "Sergio",
+        "Manolo",
+        "Jorge",
+        "Manuel",
+        "agustin"
+      ]
+    }
+  ],
+  "matches": [
+    {
+      "tournamentId": "0f41",
+      "gameId": "game-r1-1",
+      "round": 1,
+      "date": "2026-02-11T19:58:54.696Z",
+      "homeTeamId": "73ec",
+      "visitorTeamId": "d5b5",
+      "homeScore": 5,
+      "visitorScore": 15,
+      "id": "ec29"
+    },
+    {
+      "tournamentId": "0f41",
+      "gameId": "game-r2-1",
+      "round": 2,
+      "date": "2026-02-11T21:05:39.754Z",
+      "homeTeamId": "d5b5",
+      "visitorTeamId": "04c1",
+      "homeScore": 2,
+      "visitorScore": 0,
+      "id": "0274"
     }
   ],
   "comunidades": [

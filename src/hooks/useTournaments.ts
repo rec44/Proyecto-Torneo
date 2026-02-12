@@ -37,5 +37,36 @@ export function useTournaments() {
     }
   };
 
-  return { tournaments, loading, error, fetchTournaments, addTournament };
+  const updateTournament = async (id: string, tournament: Tournament) => {
+    try {
+      const updated = await tournamentService.update(id, tournament);
+      setTournaments(prev =>
+        prev.map(t => (t.id === id ? updated : t))
+      );
+      return updated;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al actualizar');
+      throw err;
+    }
+  };
+
+  const deleteTournament = async (id: string) => {
+    try {
+      await tournamentService.delete(id);
+      setTournaments(prev => prev.filter(t => t.id !== id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al eliminar');
+      throw err;
+    }
+  };
+
+  return {
+    tournaments,
+    loading,
+    error,
+    fetchTournaments,
+    addTournament,
+    updateTournament,
+    deleteTournament,
+  };
 }

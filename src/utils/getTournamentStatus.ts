@@ -7,11 +7,19 @@ export function getTournamentStatus(tournament: Tournament, teams: Team[]) {
   const end = new Date(tournament.endDate);
   const inscritos = teams.filter(t => t.tournamentId === tournament.id).length;
 
-  if (now < start) return "open"; // Aún no empieza
+  // Si el torneo ya terminó
+  if (now > end) return "finished";
+
+  // Si el torneo está en curso (entre inicio y fin)
   if (now >= start && now <= end) {
-    if (inscritos >= tournament.maxTeams) return "closed"; // Plazas llenas
-    return "open"; // Abierto y en curso
+    // Si las plazas están llenas, pero aún no ha terminado, está "en curso"
+    if (inscritos >= tournament.maxTeams) return "inprogress";
+    // Si la fecha de inicio ya pasó, está "en curso"
+    return "inprogress";
   }
-  if (now > end) return "finished"; // Ya terminó
+
+  // Si aún no empieza
+  if (now < start) return "open";
+
   return "open";
 }

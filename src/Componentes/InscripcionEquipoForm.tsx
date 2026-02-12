@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 
 interface Props {
   tournament: Tournament;
+  equiposInscritos: Team[]; // <-- añade esta prop
   onSuccess?: () => void;
   team?: Team;
   submitLabel?: string;
@@ -16,6 +17,7 @@ interface Props {
 
 export default function InscripcionEquipoForm({
   tournament,
+  equiposInscritos,
   onSuccess,
   team,
   submitLabel,
@@ -24,7 +26,7 @@ export default function InscripcionEquipoForm({
   const { user } = useAuth();
   const navigate = useNavigate();
   const [teamName, setTeamName] = useState("");
-  const [players, setPlayers] = useState<string[]>([""]);
+  const [players, setPlayers] = useState<string[]>([user?.name ?? ""]);
   const [error, setError] = useState<string | null>(null);
   const max = tournament.maxPlayersPerTeam;
   const min = tournament.minPlayersPerTeam;
@@ -34,13 +36,17 @@ export default function InscripcionEquipoForm({
   useEffect(() => {
     if (team) {
       setTeamName(team.name);
-      setPlayers(team.players.length ? team.players : [""]);
+      setPlayers(team.players.length ? team.players : [user?.name ?? ""]);
+    } else {
+      setPlayers([user?.name ?? ""]);
     }
-  }, [team]);
+  }, [team, user]);
 
-  const finalSubmitLabel = submitLabel ?? (isEdit ? "Guardar cambios" : "Inscribir equipo");
+  const finalSubmitLabel =
+    submitLabel ?? (isEdit ? "Guardar cambios" : "Inscribir equipo");
 
   const handlePlayerChange = (idx: number, value: string) => {
+    if (idx === 0) return; // No permitir editar el primer jugador
     const updated = [...players];
     updated[idx] = value;
     setPlayers(updated);
@@ -51,13 +57,28 @@ export default function InscripcionEquipoForm({
   };
 
   const removePlayer = (idx: number) => {
+    if (idx === 0) return; // No permitir eliminar el primer jugador
     if (players.length > min) setPlayers(players.filter((_, i) => i !== idx));
   };
+
+  // Supón que tienes la lista de equipos inscritos en el torneo en la prop `tournament.teams`
+  // Si no, pásala como prop o cárgala con un hook
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    const cleanPlayers = players.map(p => p.trim()).filter(Boolean);
+    const cleanPlayers = players.map((p) => p.trim()).filter(Boolean);
+
+    // Validación de nombre único en el torneo
+    const nombreEquipo = teamName.trim().toLowerCase();
+    const nombreRepetido = equiposInscritos
+      .filter((eq) => !(isEdit && eq.id === team?.id)) // Excluye solo el propio equipo en edición
+      .some((eq) => eq.name.trim().toLowerCase() === nombreEquipo);
+
+    if (nombreRepetido) {
+      setError("Ya existe un equipo con ese nombre inscrito en este torneo.");
+      return;
+    }
 
     if (!teamName.trim()) {
       setError("El nombre del equipo es obligatorio.");
@@ -78,7 +99,7 @@ export default function InscripcionEquipoForm({
           name: teamName.trim(),
           players: cleanPlayers,
           tournamentId: team.tournamentId, // Mantiene el torneo
-          captainId: team.captainId,       // Mantiene el capitán
+          captainId: team.captainId, // Mantiene el capitán
         });
         await Swal.fire({
           icon: "success",
@@ -104,12 +125,19 @@ export default function InscripcionEquipoForm({
         onSuccess?.();
       }
     } catch {
-      setError(isEdit ? "Error al actualizar el equipo." : "Error al inscribir el equipo.");
+      setError(
+        isEdit
+          ? "Error al actualizar el equipo."
+          : "Error al inscribir el equipo.",
+      );
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-blue-50 p-6 rounded-xl shadow">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 bg-blue-50 p-6 rounded-xl shadow"
+    >
       <h2 className="text-xl font-bold mb-2">Inscribir equipo</h2>
       {error && <div className="text-red-500 text-sm">{error}</div>}
       <div>
@@ -117,7 +145,7 @@ export default function InscripcionEquipoForm({
         <input
           type="text"
           value={teamName}
-          onChange={e => setTeamName(e.target.value)}
+          onChange={(e) => setTeamName(e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
       </div>
@@ -130,11 +158,11 @@ export default function InscripcionEquipoForm({
             <input
               type="text"
               value={player}
-              onChange={e => handlePlayerChange(idx, e.target.value)}
+              onChange={(e) => handlePlayerChange(idx, e.target.value)}
               className="flex-1 border rounded px-3 py-2"
               placeholder={`Jugador ${idx + 1}`}
             />
-            {players.length > min && (
+            {players.length > min && idx !== 0 && (
               <button
                 type="button"
                 onClick={() => removePlayer(idx)}
@@ -143,6 +171,9 @@ export default function InscripcionEquipoForm({
               >
                 ×
               </button>
+            )}
+            {idx === 0 && (
+              <span className="text-xs text-gray-500 ml-2">(Capitán)</span>
             )}
           </div>
         ))}

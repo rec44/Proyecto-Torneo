@@ -14,7 +14,6 @@ export interface Tournament {
   city: string;
   venue: string;
   description?: string;
-  imageUrl?: string;
   createdAt: string;
-  ownerId: number;
+  ownerId: string;
 }

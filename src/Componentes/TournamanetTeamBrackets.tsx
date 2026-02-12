@@ -48,13 +48,14 @@ export default function TournamentBrackets({
         <tbody>
           {sortedTeams.map(team => {
             const isMyTeam = user && team.captainId === user.id;
+            const isAdmin = user && user.role === "admin";
             return (
               <tr key={team.id} className="border-b">
                 <td className="px-4 py-2 font-semibold">{team.name}</td>
                 <td className="px-4 py-2 text-gray-600">{team.players.join(", ")}</td>
                 <td className="px-4 py-2">{getCaptainName(team.captainId)}</td>
                 <td className="px-4 py-2 flex gap-2">
-                  {(isCreator || isMyTeam) && (
+                  {(isCreator || isMyTeam || isAdmin) && (
                     <button
                       className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm"
                       onClick={() => navigate(`/edit-team/${team.id}`)}
@@ -62,7 +63,7 @@ export default function TournamentBrackets({
                       Editar equipo
                     </button>
                   )}
-                  {isMyTeam && (
+                  {(isMyTeam || isCreator || isAdmin) && (
                     <button
                       className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
                       onClick={() => onUnregisterTeam && onUnregisterTeam(team.id)}

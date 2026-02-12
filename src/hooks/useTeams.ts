@@ -5,18 +5,21 @@ import type { Team } from "../types/team";
 export function useTeams(tournamentId?: string) {
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!tournamentId) {
-      setTeams([]);
-      setLoading(false);
-      return;
-    }
     setLoading(true);
-    teamService.getByTournament(tournamentId)
+    setError(null);
+
+    const fetchTeams = tournamentId
+      ? teamService.getByTournament(tournamentId)
+      : teamService.getAll();
+
+    fetchTeams
       .then(setTeams)
+      .catch(() => setError("Error al cargar equipos"))
       .finally(() => setLoading(false));
   }, [tournamentId]);
 
-  return { teams, loading };
+  return { teams, loading, error };
 }
