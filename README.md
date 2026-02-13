@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# Proyecto Torneos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
 
-Currently, two official plugins are available:
+Este proyecto es una plataforma web para la gestión de torneos deportivos. Permite a los usuarios crear, buscar e inscribirse en torneos, gestionar equipos, visualizar brackets y partidos, y administrar usuarios y torneos desde un panel de administración. Incluye funcionalidades de autenticación, filtros avanzados, historial de partidos, calendario de torneos y gestión de resultados en tiempo real.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tecnologías utilizadas
 
-## React Compiler
+- **React** (Vite o Create React App)
+- **TypeScript**
+- **React Router**
+- **Tailwind CSS** (o CSS Modules)
+- **SweetAlert2** (para notificaciones)
+- **JSON-server** o API REST simulada para datos
+- **React Hook Form** y **Yup** (validación de formularios)
+- **react-tournament-bracket** (visualización de brackets de torneos)
+- **Context API** (gestión de autenticación)
+- **Otras librerías auxiliares** (por ejemplo, date-fns, lodash)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Instrucciones de instalación y ejecución
 
-## Expanding the ESLint configuration
+1. **Clona el repositorio:**
+   ```sh
+   git clone https://github.com/tu-usuario/proyecto-torneos.git
+   cd proyecto-torneos
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2. **Instala las dependencias:**
+   ```sh
+   npm install
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+3. **(Opcional) Inicia el servidor de datos simulado:**
+   ```sh
+   npx json-server --watch db.json --port 3001
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+4. **Inicia la aplicación:**
+   ```sh
+   npm run dev
+   ```
+   o si usas Create React App:
+   ```sh
+   npm start
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+6. **Accede a la aplicación:**
+   - Abre [http://localhost:5173](http://localhost:5173) (o el puerto que indique tu terminal).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Notas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Puedes crear usuarios, torneos y equipos desde la propia aplicación.
+- El panel de administración está disponible para usuarios con rol de administrador.
+- El proyecto es fácilmente ampliable para otros deportes o reglas de torneo.
+- Si tienes dudas, revisa los comentarios en el código fuente para entender la estructura y lógica de cada componente.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
