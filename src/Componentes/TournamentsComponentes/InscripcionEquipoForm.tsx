@@ -1,20 +1,33 @@
+/**
+ * InscripcionEquipoForm
+ * 
+ * Formulario para inscribir o editar un equipo en un torneo.
+ * - Valida nombre único, número de jugadores y límites.
+ * - Permite añadir/eliminar jugadores.
+ * - Muestra errores y confirma la inscripción/edición.
+ * - Redirige tras inscribir el equipo.
+ */
+
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
-import { teamService } from "../services/teamService";
-import type { Tournament } from "../types/tournament";
-import type { Team } from "../types/team";
+import { useAuth } from "../../hooks/useAuth";
+import { teamService } from "../../services/teamService";
+import type { Tournament } from "../../types/tournament";
+import type { Team } from "../../types/team";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 interface Props {
   tournament: Tournament;
-  equiposInscritos: Team[]; // <-- añade esta prop
+  equiposInscritos: Team[];
   onSuccess?: () => void;
   team?: Team;
   submitLabel?: string;
   mode?: "create" | "edit";
 }
 
+/**
+ * Componente principal del formulario de inscripción/edición de equipo.
+ */
 export default function InscripcionEquipoForm({
   tournament,
   equiposInscritos,
@@ -33,6 +46,9 @@ export default function InscripcionEquipoForm({
 
   const isEdit = mode === "edit" || Boolean(team);
 
+  /**
+   * Inicializa el formulario con datos del equipo si es edición.
+   */
   useEffect(() => {
     if (team) {
       setTeamName(team.name);
@@ -45,25 +61,37 @@ export default function InscripcionEquipoForm({
   const finalSubmitLabel =
     submitLabel ?? (isEdit ? "Guardar cambios" : "Inscribir equipo");
 
+  /**
+   * Maneja el cambio de nombre de jugador.
+   */
   const handlePlayerChange = (idx: number, value: string) => {
-    if (idx === 0) return; // No permitir editar el primer jugador
+    if (idx === 0) return; // No permitir editar el capitán
     const updated = [...players];
     updated[idx] = value;
     setPlayers(updated);
   };
 
+  /**
+   * Añade un jugador al equipo.
+   */
   const addPlayer = () => {
     if (players.length < max) setPlayers([...players, ""]);
   };
 
+  /**
+   * Elimina un jugador del equipo.
+   */
   const removePlayer = (idx: number) => {
-    if (idx === 0) return; // No permitir eliminar el primer jugador
+    if (idx === 0) return; // No permitir eliminar el capitán
     if (players.length > min) setPlayers(players.filter((_, i) => i !== idx));
   };
 
-  // Supón que tienes la lista de equipos inscritos en el torneo en la prop `tournament.teams`
-  // Si no, pásala como prop o cárgala con un hook
-
+  /**
+   * Maneja el envío del formulario.
+   * - Valida nombre único, número de jugadores y límites.
+   * - Crea o actualiza el equipo.
+   * - Muestra confirmación y redirige.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -72,7 +100,7 @@ export default function InscripcionEquipoForm({
     // Validación de nombre único en el torneo
     const nombreEquipo = teamName.trim().toLowerCase();
     const nombreRepetido = equiposInscritos
-      .filter((eq) => !(isEdit && eq.id === team?.id)) // Excluye solo el propio equipo en edición
+      .filter((eq) => !(isEdit && eq.id === team?.id))
       .some((eq) => eq.name.trim().toLowerCase() === nombreEquipo);
 
     if (nombreRepetido) {
@@ -95,11 +123,12 @@ export default function InscripcionEquipoForm({
 
     try {
       if (isEdit && team) {
+        // Actualiza el equipo existente
         await teamService.update(team.id, {
           name: teamName.trim(),
           players: cleanPlayers,
-          tournamentId: team.tournamentId, // Mantiene el torneo
-          captainId: team.captainId, // Mantiene el capitán
+          tournamentId: team.tournamentId,
+          captainId: team.captainId,
         });
         await Swal.fire({
           icon: "success",
@@ -109,6 +138,7 @@ export default function InscripcionEquipoForm({
         });
         onSuccess?.();
       } else {
+        // Crea un nuevo equipo
         await teamService.create({
           name: teamName.trim(),
           tournamentId: tournament.id,
@@ -133,6 +163,7 @@ export default function InscripcionEquipoForm({
     }
   };
 
+  // Render principal del formulario
   return (
     <form
       onSubmit={handleSubmit}

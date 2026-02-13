@@ -1,8 +1,13 @@
+/**
+ * LoginForm
+ * 
+ * Formulario de inicio de sesión.
+ */
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 interface LoginFormValues {
@@ -10,20 +15,28 @@ interface LoginFormValues {
   password: string;
 }
 
+// Esquema de validación con yup
 const schema: yup.ObjectSchema<LoginFormValues> = yup.object({
   email: yup.string().required("El email es obligatorio").email("El email no es válido"),
   password: yup.string().required("La contraseña es obligatoria").min(6, "La contraseña debe tener al menos 6 caracteres"),
 });
 
+/**
+ * Componente principal del formulario de login.
+ */
 const LoginForm: React.FC = () => {
   const { login, error, findUserByEmail } = useAuth();
   const navigate = useNavigate();
+  // Hook de formulario con validación
   const { register, handleSubmit, formState: { errors }, setError, reset } = useForm<LoginFormValues>({
     resolver: yupResolver(schema),
     mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
 
+  /**
+   * Maneja el envío del formulario.
+   */
   const onSubmit = async (data: LoginFormValues) => {
     const user = await findUserByEmail(data.email);
     if (!user) {
@@ -41,8 +54,10 @@ const LoginForm: React.FC = () => {
     }
   };
 
+  // Error global para mostrar en el formulario
   const globalError = errors.email?.message || errors.password?.message || error;
 
+  // Render principal del formulario
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       {globalError && <div className="text-red-500 text-sm mb-2">{globalError}</div>}

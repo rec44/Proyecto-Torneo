@@ -1,8 +1,16 @@
+/**
+ * HomePage
+ * 
+ * Página principal de la aplicación.
+ * - Muestra la barra de navegación y el título.
+ * - Permite filtrar torneos por nombre, deporte, estado, comunidad y provincia.
+ * - Filtra torneos según el estado real, inscripción y propiedad del usuario.
+ */
 import { useEffect, useState } from "react";
 import { useTournaments } from "../hooks/useTournaments";
 import { useFilter } from "../hooks/useFilter";
-import TournamentList from "../Componentes/TournamentList";
-import TournamentFilter from "../Componentes/TournamentFilter";
+import TournamentList from "../Componentes/TournamentsComponentes/TournamentList";
+import TournamentFilter from "../Componentes/TournamentsComponentes/TournamentFilter";
 import Navegacion from "../Componentes/Navegacion";
 import { locationService } from "../services/locationServices";
 import { useTeams } from "../hooks/useTeams";
@@ -12,7 +20,7 @@ import { useAuth } from "../hooks/useAuth";
 export default function HomePage() {
   const { user } = useAuth();
   const { tournaments, loading, error } = useTournaments();
-  const { teams } = useTeams(); // <-- Asegúrate de tener los equipos para el filtro de estado
+  const { teams } = useTeams(); 
   const { filters, setFilters, filteredTournaments } = useFilter(tournaments);
 
   const [comunidades, setComunidades] = useState<
@@ -59,22 +67,32 @@ export default function HomePage() {
     .filter(team => team.captainId === user?.id)
     .map(team => team.tournamentId);
 
-  // Filtra los torneos finalizados si no se filtra explícitamente por estado
+  // Filtra por estado real según la fecha
+  let torneosFiltrados = filteredTournaments;
+
+  if (filters.status) {
+    torneosFiltrados = torneosFiltrados.filter(
+      torneo => getTournamentStatus(torneo, teams) === filters.status
+    );
+  }
+
+  // Quita los torneos finalizados si no se filtra explícitamente por estado
   const mostrarFinalizados =
     filters.status && filters.status.toLowerCase() === "finished";
-  const torneosFiltrados = (mostrarFinalizados
-    ? filteredTournaments
-    : filteredTournaments.filter(
-        torneo => getTournamentStatus(torneo, teams) !== "finished"
-      )
-  )
-    // Quita los torneos donde el usuario es owner o ya está inscrito
-    .filter(
-      torneo =>
-        torneo.ownerId !== user?.id &&
-        !joinedTournamentIds.includes(torneo.id)
+  if (!mostrarFinalizados) {
+    torneosFiltrados = torneosFiltrados.filter(
+      torneo => getTournamentStatus(torneo, teams) !== "finished"
     );
+  }
 
+  // Quita los torneos donde el usuario es owner o ya está inscrito
+  torneosFiltrados = torneosFiltrados.filter(
+    torneo =>
+      torneo.ownerId !== user?.id &&
+      !joinedTournamentIds.includes(torneo.id)
+  );
+
+  // Render principal: filtros y lista de torneos
   return (
     <>
       <Navegacion />

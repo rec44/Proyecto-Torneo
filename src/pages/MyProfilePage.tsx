@@ -1,10 +1,21 @@
+/**
+ * MyProfilePage
+ * 
+ * Página de perfil del usuario.
+ * - Muestra información básica del usuario (nombre, email, rol).
+ * - Permite cambiar entre el calendario de torneos y el historial de partidos mediante pestañas.
+ */
+import { useState } from "react";
 import Navegacion from "../Componentes/Navegacion";
 import { useAuth } from "../hooks/useAuth";
-import UserMatchHistory from "../Componentes/UserMatchHistory";
+import UserMatchHistory from "../Componentes/ProfileComponentes/UserMatchHistory";
+import UserTournamentCalendar from "../Componentes/ProfileComponentes/UserTournamentCalendar";
 
 export default function MyProfilePage() {
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState<"calendar" | "history">("calendar");
 
+  // Render principal: info de usuario y pestañas de calendario/historial
   return (
     <>
       <Navegacion />
@@ -28,9 +39,40 @@ export default function MyProfilePage() {
             </div>
           </div>
         </div>
-        {/* Historial de partidos del usuario */}
         <div className="max-w-4xl mx-auto mt-8">
-          {user && <UserMatchHistory userId={user.id} />}
+          {/* Pestañas para cambiar entre calendario e historial */}
+          <div className="flex gap-3 mb-6">
+            <button
+              className={`flex-1 py-2 rounded-lg font-semibold ${
+                activeTab === "calendar"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+              onClick={() => setActiveTab("calendar")}
+            >
+              Calendario
+            </button>
+            <button
+              className={`flex-1 py-2 rounded-lg font-semibold ${
+                activeTab === "history"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+              onClick={() => setActiveTab("history")}
+            >
+              Historial
+            </button>
+          </div>
+
+          {/* Renderiza el calendario o el historial según la pestaña activa */}
+          {user && activeTab === "calendar" && (
+            <UserTournamentCalendar userId={user.id} />
+          )}
+          {user && activeTab === "history" && (
+            <div className="mt-8">
+              <UserMatchHistory userId={user.id} />
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -1,3 +1,12 @@
+/**
+ * TournamentFilter
+ * 
+ * Filtros para la búsqueda de torneos.
+ * - Permite filtrar por nombre, deporte, estado, comunidad y provincia.
+ * - El filtro de provincia se activa solo si hay comunidad seleccionada.
+ * - Llama a onFilterChange al cambiar cualquier filtro.
+ */
+
 import React from "react";
 
 interface FilterProps {
@@ -13,6 +22,9 @@ interface FilterProps {
   provincias?: { codigo: string; nombre: string }[];
 }
 
+/**
+ * Renderiza los campos de filtro para la lista de torneos.
+ */
 const TournamentFilter: React.FC<FilterProps> = ({
   filters,
   onFilterChange,
@@ -21,6 +33,7 @@ const TournamentFilter: React.FC<FilterProps> = ({
 }) => {
   return (
     <div className="flex flex-wrap gap-4 p-4 bg-white rounded-lg shadow mb-6">
+      {/* Filtro por nombre */}
       <input
         type="text"
         placeholder="Buscar torneo..."
@@ -29,6 +42,7 @@ const TournamentFilter: React.FC<FilterProps> = ({
         className="border rounded px-3 py-2"
       />
 
+      {/* Filtro por deporte */}
       <select
         value={filters.sport}
         onChange={e => onFilterChange({ ...filters, sport: e.target.value })}
@@ -40,6 +54,7 @@ const TournamentFilter: React.FC<FilterProps> = ({
         <option value="voleibol">Voleibol</option>
       </select>
 
+      {/* Filtro por estado */}
       <select
         value={filters.status}
         onChange={e => onFilterChange({ ...filters, status: e.target.value })}
@@ -48,9 +63,11 @@ const TournamentFilter: React.FC<FilterProps> = ({
         <option value="">Todos los estados</option>
         <option value="open">Abierto</option>
         <option value="closed">Cerrado</option>
+        <option value="inprogress">En curso</option>
         <option value="finished">Finalizado</option>
       </select>
 
+      {/* Filtro por comunidad */}
       <select
         value={filters.community}
         onChange={e => onFilterChange({ ...filters, community: e.target.value, province: "" })}
@@ -62,6 +79,7 @@ const TournamentFilter: React.FC<FilterProps> = ({
         ))}
       </select>
 
+      {/* Filtro por provincia (solo habilitado si hay comunidad) */}
       <select
         value={filters.province}
         onChange={e => onFilterChange({ ...filters, province: e.target.value })}

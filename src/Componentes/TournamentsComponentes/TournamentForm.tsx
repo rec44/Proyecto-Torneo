@@ -1,19 +1,30 @@
+/**
+ * TournamentForm
+ * 
+ * Formulario para crear o editar un torneo.
+ * - Valida todos los campos relevantes (nombre, deporte, fechas, equipos, jugadores, localización, etc.).
+ * - Permite seleccionar comunidad y provincia dinámicamente.
+ * - Permite establecer mínimo y máximo de equipos y jugadores por equipo.
+ * - Llama a la función onSubmit con los datos validados.
+ * - Muestra errores de validación en tiempo real.
+ */
+
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import type { Tournament } from "../types/tournament";
-import { locationService } from "../services/locationServices";
-import type { Comunidad, Provincia } from "../types/location";
+import type { Tournament } from "../../types/tournament";
+import { locationService } from "../../services/locationServices";
+import type { Comunidad, Provincia } from "../../types/location";
 
 type FormValues = Omit<
   Tournament,
   "id" | "currentTeams" | "createdAt" | "participants" | "ownerId"
 > & {
   description?: string;
-  imageUrl?: string;
 };
 
+// Esquema de validación para el formulario de torneo
 const schema: yup.ObjectSchema<FormValues> = yup.object({
   name: yup.string().required("El nombre es obligatorio"),
   sport: yup.string().required("El deporte es obligatorio"),
@@ -22,6 +33,10 @@ const schema: yup.ObjectSchema<FormValues> = yup.object({
     .number()
     .min(2, "Mínimo 2 equipos")
     .required("El número máximo de equipos es obligatorio"),
+  minTeams: yup
+    .number()
+    .min(2, "Mínimo 2 equipos")
+    .required("El número mínimo de equipos es obligatorio"),
   maxPlayersPerTeam: yup
     .number()
     .min(1, "Mínimo 1 jugador")
@@ -37,7 +52,6 @@ const schema: yup.ObjectSchema<FormValues> = yup.object({
   city: yup.string().required("La ciudad es obligatoria"),
   venue: yup.string().required("La calle es obligatoria"),
   description: yup.string().optional(),
-  imageUrl: yup.string().url("Debe ser una URL válida").optional(),
   status: yup.mixed<"open" | "closed" | "finished">().required(),
 });
 
@@ -55,8 +69,8 @@ const defaultValues: FormValues = {
   city: "",
   venue: "",
   description: "",
-  imageUrl: "",
   status: "open",
+  minTeams: 2,
 };
 
 interface Props {
@@ -65,7 +79,11 @@ interface Props {
   submitLabel?: string;
 }
 
+/**
+ * Componente principal del formulario de torneo.
+ */
 const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel = "Crear torneo" }) => {
+  // Hook de formulario con validación y valores por defecto
   const {
     register,
     handleSubmit,
@@ -79,15 +97,19 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
     mode: "onBlur",
   });
 
+  // Estado para comunidades y provincias
   const [comunidades, setComunidades] = useState<Comunidad[]>([]);
   const [provincias, setProvincias] = useState<Provincia[]>([]);
 
+  // Comunidad seleccionada para cargar provincias
   const selectedCommunity = watch("community");
 
+  // Carga las comunidades al montar el componente
   useEffect(() => {
     locationService.getComunidades().then(setComunidades);
   }, []);
 
+  // Carga las provincias cuando cambia la comunidad seleccionada
   useEffect(() => {
     if (selectedCommunity) {
       locationService
@@ -100,18 +122,24 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
     resetField("city");
   }, [selectedCommunity, resetField]);
 
+  // Si hay valores iniciales (modo edición), los carga en el formulario
   useEffect(() => {
     if (initialValues) reset(initialValues);
   }, [initialValues, reset]);
 
+  /**
+   * Devuelve la clase CSS del input según si hay error o está rellenado.
+   */
   const getInputClass = (field: keyof FormValues) => {
     if (errors[field]) return "border-red-500";
     if (watch(field) && !errors[field]) return "border-green-500";
     return "border-gray-300";
   };
 
+  // Render principal del formulario
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Campo nombre */}
       <div>
         <label className="block font-medium">Nombre</label>
         <input
@@ -121,6 +149,7 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
         <span className="text-red-500 text-sm">{errors.name?.message}</span>
       </div>
 
+      {/* Campo deporte */}
       <div>
         <label className="block font-medium">Deporte</label>
         <select
@@ -134,7 +163,22 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
         </select>
         <span className="text-red-500 text-sm">{errors.sport?.message}</span>
       </div>
+
+      {/* Campos de equipos y jugadores */}
       <div className="flex gap-4">
+        <div className="flex-1">
+          <label className="block font-medium">Mín. equipos</label>
+          <input
+            type="number"
+            {...register("minTeams", { valueAsNumber: true })}
+            className={`w-full rounded px-3 py-2 border ${getInputClass("minTeams")}`}
+            min={2}
+            max={watch("maxTeams") || undefined}
+          />
+          <span className="text-red-500 text-sm">
+            {errors.minTeams?.message}
+          </span>
+        </div>
         <div className="flex-1">
           <label className="block font-medium">Máx. equipos</label>
           <input
@@ -145,18 +189,6 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
           />
           <span className="text-red-500 text-sm">
             {errors.maxTeams?.message}
-          </span>
-        </div>
-        <div className="flex-1">
-          <label className="block font-medium">Máx. jugadores/equipo</label>
-          <input
-            type="number"
-            {...register("maxPlayersPerTeam", { valueAsNumber: true })}
-            className={`w-full rounded px-3 py-2 border ${getInputClass("maxPlayersPerTeam")}`}
-            min={1}
-          />
-          <span className="text-red-500 text-sm">
-            {errors.maxPlayersPerTeam?.message}
           </span>
         </div>
         <div className="flex-1">
@@ -171,7 +203,21 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
             {errors.minPlayersPerTeam?.message}
           </span>
         </div>
+         <div className="flex-1">
+          <label className="block font-medium">Máx. jugadores/equipo</label>
+          <input
+            type="number"
+            {...register("maxPlayersPerTeam", { valueAsNumber: true })}
+            className={`w-full rounded px-3 py-2 border ${getInputClass("maxPlayersPerTeam")}`}
+            min={1}
+          />
+          <span className="text-red-500 text-sm">
+            {errors.maxPlayersPerTeam?.message}
+          </span>
+        </div>
       </div>
+
+      {/* Fechas */}
       <div className="flex gap-4">
         <div className="flex-1">
           <label className="block font-medium">Fecha inicio</label>
@@ -198,6 +244,8 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
           </span>
         </div>
       </div>
+
+      {/* Comunidad y provincia */}
       <div className="flex gap-4">
         <div className="flex-1">
           <label className="block font-medium">Comunidad</label>
@@ -237,6 +285,7 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
         </div>
       </div>
 
+      {/* Ciudad */}
       <div>
         <label className="block font-medium">Ciudad</label>
         <input
@@ -245,6 +294,8 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
         />
         <span className="text-red-500 text-sm">{errors.city?.message}</span>
       </div>
+
+      {/* Calle */}
       <div>
         <label className="block font-medium">Calle</label>
         <input
@@ -253,6 +304,8 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
         />
         <span className="text-red-500 text-sm">{errors.venue?.message}</span>
       </div>
+
+      {/* Descripción */}
       <div>
         <label className="block font-medium">Descripción</label>
         <textarea
@@ -260,6 +313,8 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
           className={`w-full border rounded px-3 py-2 ${getInputClass("description")}`}
         />
       </div>
+
+      {/* Nivel */}
       <div>
         <label className="block font-medium">Nivel de jugadores:</label>
         <select
@@ -273,7 +328,8 @@ const TournamentForm: React.FC<Props> = ({ onSubmit, initialValues, submitLabel 
         </select>
         <span className="text-red-500 text-sm">{errors.category?.message}</span>
       </div>
-      {/* Campo participants oculto, normalmente se gestiona desde la lógica de inscripción */}
+
+      {/* Botón de envío */}
       <button
         type="submit"
         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded"

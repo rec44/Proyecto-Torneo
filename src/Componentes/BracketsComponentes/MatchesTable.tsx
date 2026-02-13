@@ -1,7 +1,12 @@
+/**
+ * MatchesTable
+ *
+ * Muestra el historial de partidos del torneo en una tabla.
+ */
 import { useMemo } from "react";
-import type { Match } from "../types/match";
-import { useTournaments } from "../hooks/useTournaments";
-import { useTeams } from "../hooks/useTeams";
+import type { Match } from "../../types/match";
+import { useTournaments } from "../../hooks/useTournaments";
+import { useTeams } from "../../hooks/useTeams";
 
 interface Props {
   matches: Match[];
@@ -9,10 +14,16 @@ interface Props {
   error?: string | null;
 }
 
+/**
+ * Renderiza la tabla de partidos jugados.
+ */
 export default function MatchesTable({ matches, loading, error }: Props) {
   const { tournaments } = useTournaments();
   const { teams } = useTeams();
 
+  /**
+   * Construye las filas de la tabla con datos de equipos y torneos.
+   */
   const rows = useMemo(
     () =>
       matches.map(match => {
@@ -36,9 +47,16 @@ export default function MatchesTable({ matches, loading, error }: Props) {
     [matches, tournaments, teams]
   );
 
-  if (loading) return <div className="p-4 text-gray-500">Cargando resultados…</div>;
-  if (error) return <div className="p-4 text-red-600">No se pudieron cargar los partidos.</div>;
+  if (loading)
+    return <div className="p-4 text-gray-500">Cargando resultados…</div>;
+  if (error)
+    return (
+      <div className="p-4 text-red-600">
+        No se pudieron cargar los partidos.
+      </div>
+    );
 
+  // Render principal
   return (
     <div className="bg-white rounded-2xl shadow p-6">
       <h2 className="text-xl font-semibold mb-4">Historial de partidos</h2>

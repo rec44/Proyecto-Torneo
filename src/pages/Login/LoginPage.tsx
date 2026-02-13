@@ -1,6 +1,15 @@
-import Navegacion from "../Componentes/Navegacion";
+/**
+ * LoginPage
+ * 
+ * Página de inicio de sesión.
+ * - Renderiza el formulario de login.
+ * - Incluye enlace para ir a la página de registro si no tienes cuenta.
+ */
+
+
+import Navegacion from "../../Componentes/Navegacion";
 import { Link } from "react-router-dom";
-import LoginForm from "../Componentes/LoginForm";
+import LoginForm from "../../Componentes/LoginComponentes/LoginForm";
 
 export default function LoginPage() {
   return (

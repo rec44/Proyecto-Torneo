@@ -1,3 +1,14 @@
+/**
+ * AdminPanel
+ * 
+ * Panel de administración para gestionar usuarios, torneos y equipos.
+ * - Permite cambiar entre pestañas: Usuarios, Torneos y Equipos.
+ * - Muestra tablas con información y botones para editar/eliminar cada entidad.
+ * - Permite crear nuevos usuarios y torneos.
+ * - En torneos, el botón "Ver detalles" lleva al bracket del torneo.
+ * - En equipos, el enlace lleva al torneo y el botón permite editar/eliminar el equipo.
+ */
+
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { User } from "../types/user";
@@ -18,6 +29,9 @@ interface Props {
   onDeleteTeam: (id: string) => void;
 }
 
+/**
+ * Componente principal del panel de administración.
+ */
 const AdminPanel: React.FC<Props> = ({
   tab,
   setTab,
@@ -28,11 +42,12 @@ const AdminPanel: React.FC<Props> = ({
   onDeleteTournament,
   onDeleteTeam,
 }) => {
-  const [selectedTournament, setSelectedTournament] = React.useState<Tournament | null>(null);
   const navigate = useNavigate();
 
+  // Render principal con pestañas y tablas según la entidad seleccionada
   return (
     <div className="max-w-6xl mx-auto mt-10 bg-white rounded-xl shadow p-8">
+      {/* Botones de pestañas */}
       <div className="flex gap-4 mb-6">
         {TABS.map((t) => (
           <button
@@ -47,6 +62,7 @@ const AdminPanel: React.FC<Props> = ({
         ))}
       </div>
 
+      {/* Tabla de usuarios */}
       {tab === "Usuarios" && (
         <section>
           <h2 className="text-xl font-bold mb-4">Usuarios</h2>
@@ -68,12 +84,14 @@ const AdminPanel: React.FC<Props> = ({
                   <td>{u.email}</td>
                   <td>{u.role}</td>
                   <td>
+                    {/* Botón para editar usuario */}
                     <button
                       className="text-blue-600 mr-2"
                       onClick={() => navigate(`/admin/edit-user/${u.id}`)}
                     >
                       Editar
                     </button>
+                    {/* Botón para eliminar usuario */}
                     <button className="text-red-600" onClick={() => onDeleteUser(u.id)}>
                       Eliminar
                     </button>
@@ -82,6 +100,7 @@ const AdminPanel: React.FC<Props> = ({
               ))}
             </tbody>
           </table>
+          {/* Botón para crear usuario */}
           <button
             className="bg-green-600 text-white px-4 py-2 rounded"
             onClick={() => navigate("/admin/crear-usuario")}
@@ -91,6 +110,7 @@ const AdminPanel: React.FC<Props> = ({
         </section>
       )}
 
+      {/* Tabla de torneos */}
       {tab === "Torneos" && (
         <section>
           <h2 className="text-xl font-bold mb-4">Torneos</h2>
@@ -112,9 +132,14 @@ const AdminPanel: React.FC<Props> = ({
                   <td>{t.sport}</td>
                   <td>{t.status}</td>
                   <td>
-                    <button className="text-blue-600 mr-2" onClick={() => setSelectedTournament(t)}>
+                    {/* Botón para ver bracket del torneo */}
+                    <button
+                      className="text-blue-600 mr-2"
+                      onClick={() => navigate(`/tournamentBracket/${t.id}`)}
+                    >
                       Ver detalles
                     </button>
+                    {/* Botón para eliminar torneo */}
                     <button className="text-red-600" onClick={() => onDeleteTournament(t.id)}>
                       Eliminar
                     </button>
@@ -123,29 +148,12 @@ const AdminPanel: React.FC<Props> = ({
               ))}
             </tbody>
           </table>
+          {/* Botón para crear torneo */}
           <button className="bg-green-600 text-white px-4 py-2 rounded">Crear torneo</button>
-
-          {selectedTournament && (
-            <div className="bg-gray-100 p-4 rounded mt-4">
-              <h3 className="font-bold mb-2">Detalles de {selectedTournament.name}</h3>
-              <p>Ciudad: {selectedTournament.city}</p>
-              <p>Fechas: {selectedTournament.startDate} - {selectedTournament.endDate}</p>
-              <p>Estado: {selectedTournament.status}</p>
-              <h4 className="mt-2 font-semibold">Equipos inscritos:</h4>
-              <ul>
-                {teams
-                  .filter(team => team.tournamentId === selectedTournament.id)
-                  .map(team => (
-                    <li key={team.id}>
-                      <span className="font-bold">{team.name}</span>: {team.players.join(", ")}
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          )}
         </section>
       )}
 
+      {/* Tabla de equipos */}
       {tab === "Equipos" && (
         <section>
           <h2 className="text-xl font-bold mb-4">Equipos</h2>
@@ -166,6 +174,7 @@ const AdminPanel: React.FC<Props> = ({
                   <td>{team.id}</td>
                   <td>{team.name}</td>
                   <td>
+                    {/* Enlace para ver torneo */}
                     <Link
                       to={`/tournament/${team.tournamentId}`}
                       className="text-blue-600 underline hover:text-blue-800"
@@ -176,12 +185,14 @@ const AdminPanel: React.FC<Props> = ({
                   <td>{team.captainId}</td>
                   <td>{team.players.join(", ")}</td>
                   <td>
+                    {/* Botón para editar equipo */}
                     <button
                       className="text-blue-600 mr-2"
                       onClick={() => navigate(`/admin/edit-team/${team.id}`)}
                     >
                       Editar
                     </button>
+                    {/* Botón para eliminar equipo */}
                     <button
                       className="text-red-600"
                       onClick={() => onDeleteTeam(team.id)}

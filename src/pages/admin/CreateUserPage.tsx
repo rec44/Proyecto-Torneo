@@ -1,11 +1,19 @@
+/**
+ * CreateUserPage
+ * 
+ * Página para crear un nuevo usuario desde el panel de administración.
+ * - Muestra el formulario de registro con campo de rol.
+ * - Al crear, muestra confirmación y redirige al panel de admin.
+ */
 import Navegacion from "../../Componentes/Navegacion";
-import RegisterForm from "../../Componentes/RegisterForm";
+import RegisterForm from "../../Componentes/LoginComponentes/RegisterForm";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateUserPage() {
   const navigate = useNavigate();
 
+  // Muestra confirmación y redirige tras crear usuario
   const handleSuccess = () => {
     Swal.fire({
       icon: "success",
@@ -15,6 +23,7 @@ export default function CreateUserPage() {
     }).then(() => navigate("/admin"));
   };
 
+  // Render principal
   return (
     <>
       <Navegacion />

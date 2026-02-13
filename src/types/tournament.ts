@@ -4,6 +4,7 @@ export interface Tournament {
   sport: string;
   category: string;
   maxTeams: number;
+  minTeams: number;
   maxPlayersPerTeam: number;
   minPlayersPerTeam: number; // ← añadido
   startDate: string;

@@ -1,11 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
+/**
+ * BracketResultsManager
+ * 
+ * Este componente gestiona y muestra el cuadro de eliminatorias (bracket) de un torneo.
+ * Permite visualizar los partidos, editar resultados (si eres admin o dueño), y actualiza los resultados en tiempo real.
+ * 
+ * - Recibe los equipos, los partidos, y funciones para crear/actualizar partidos.
+ * - Construye las rondas del torneo según los resultados.
+ * - Permite editar el marcador de cada partido mediante un modal.
+ * - Actualiza el estado local y remoto de los resultados.
+ * - Solo muestra el modal de edición si el usuario tiene permisos.
+ * 
+ * Uso típico: se utiliza en la página de brackets de un torneo.
+ */
+
+import { useEffect, useState } from "react";
 import Bracket from "react-tournament-bracket/lib/components/Bracket";
 import BracketGame from "react-tournament-bracket/lib/components/BracketGame";
 import type { Game } from "react-tournament-bracket/lib/components/model";
 import { Side } from "react-tournament-bracket/lib/components/model";
-import { useAuth } from "../hooks/useAuth"; // Asegúrate de tener este hook
-import { matchService } from "../services/matchService";
-import type { Match } from "../types/match";
+import { useAuth } from "../../hooks/useAuth";
+import type { Match } from "../../types/match";
 
 interface Team {
   id: string;
@@ -37,7 +51,7 @@ function getWinner(game: Game): Team | null {
   if (!homeTeam && !visitorTeam) return null;
   if (homeScore > visitorScore) return homeTeam!;
   if (visitorScore > homeScore) return visitorTeam!;
-  return null; // Empate o sin datos
+  return null;
 }
 
 // Construye todas las rondas con resultados
@@ -125,7 +139,7 @@ function buildRounds(
   // Genera los títulos de las rondas
   const roundTitles = rounds.map((r, idx) => {
     if (idx === rounds.length - 1) return "Final";
-    if (idx === rounds.length - 2 && rounds.length > 2) return "Semifinal";
+    if (idx === rounds.length - 2 && rounds.length > 2) return "Semifinal";  r;
     return `Ronda ${idx + 1}`;
   });
 
@@ -158,7 +172,7 @@ function ResultModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white rounded shadow p-6 min-w-[300px]">
+      <div className="bg-white rounded shadow p-6 min-w-75">
         <h3 className="font-bold mb-4">Editar resultado</h3>
         <div className="mb-4">
           <label className="block mb-2">{homeName}:</label>
@@ -241,10 +255,14 @@ export default function BracketResultsManager({
   matchesLoading,
   matchesError,
 }: Props) {
+  // Hook de usuario para permisos
   const { user } = useAuth();
+
+  // Estado local de resultados y modal
   const [scores, setScores] = useState<Scores>({});
   const [modal, setModal] = useState<ModalState | null>(null);
 
+  // Al cargar los partidos, restaura los resultados en el bracket
   useEffect(() => {
     const restored: Scores = {};
     matches.forEach(match => {
@@ -256,12 +274,15 @@ export default function BracketResultsManager({
     setScores(restored);
   }, [matches]);
 
-  const { rounds, roundTitles } = buildRounds(teams, scores);
+  // Construye las rondas del bracket
+  const { rounds } = buildRounds(teams, scores);
   const finalGame = rounds.length ? rounds.at(-1)![0] : null;
 
+  // Permisos para editar resultados
   const canEdit =
     user && (user.role === "admin" || user.id === tournamentOwnerId);
 
+  // Abre el modal para editar el resultado de un partido
   const openModal = (game: Game) => {
     if (!canEdit) return;
     const home = game.sides[Side.HOME]?.team;
@@ -283,6 +304,7 @@ export default function BracketResultsManager({
     });
   };
 
+  // Crea o actualiza el resultado de un partido
   const upsertMatch = async ({
     gameId,
     homeId,
@@ -322,6 +344,7 @@ export default function BracketResultsManager({
     }
   };
 
+  // Render principal
   if (matchesLoading) {
     return (
       <div className="bg-white rounded-2xl p-6 shadow text-center text-gray-500">
@@ -336,6 +359,7 @@ export default function BracketResultsManager({
         <p className="mb-3 text-sm text-red-500">{matchesError}</p>
       )}
 
+      {/* Muestra el bracket si hay suficientes equipos */}
       {finalGame ? (
         <Bracket
           game={finalGame}
@@ -355,6 +379,7 @@ export default function BracketResultsManager({
         </div>
       )}
 
+      {/* Modal para editar resultados */}
       {modal && (
         <ResultModal
           open={modal.open}

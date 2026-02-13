@@ -1,6 +1,11 @@
-import type { Team } from "../types/team";
-import type { User } from "../types/user";
-import { useAuth } from "../hooks/useAuth";
+/**
+ * TournamentTeamBrackets
+ * 
+ * Muestra una tabla de equipos inscritos en el torneo y permite editar/desapuntar.
+ */
+import type { Team } from "../../types/team";
+import type { User } from "../../types/user";
+import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
@@ -10,7 +15,10 @@ interface Props {
   onUnregisterTeam?: (teamId: string) => void;
 }
 
-export default function TournamentBrackets({
+/**
+ * Renderiza la tabla de equipos inscritos.
+ */
+export default function TournamentTeamBrackets({
   teams,
   users,
   tournamentOwnerId,
@@ -19,6 +27,31 @@ export default function TournamentBrackets({
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  /**
+   * Ordena el equipo del usuario primero.
+   */
+  function sortTeams(teams: Team[], userId: string) {
+    return teams.sort((a, b) =>
+      a.captainId === userId ? -1 : b.captainId === userId ? 1 : 0
+    );
+  }
+
+  const sortedTeams = sortTeams(teams, user?.id || "");
+
+  /**
+   * Navega a la edición del equipo.
+   */
+  function handleEditTeam(teamId: string) {
+    navigate(`/edit-team/${teamId}`);
+  }
+
+  /**
+   * Desapunta el equipo del torneo.
+   */
+  function handleRemoveTeam(teamId: string) {
+    onUnregisterTeam && onUnregisterTeam(teamId);
+  }
+
   const getCaptainName = (captainId: string | number) => {
     const captain = users.find(u => u.id === captainId);
     return captain ? captain.name : "Desconocido";
@@ -26,13 +59,7 @@ export default function TournamentBrackets({
 
   const isCreator = user && user.id === tournamentOwnerId;
 
-  // Ordena: tu equipo primero, luego el resto
-  const sortedTeams = teams.slice().sort((a, b) => {
-    if (user && a.captainId === user.id) return -1;
-    if (user && b.captainId === user.id) return 1;
-    return 0;
-  });
-
+  // Render principal
   return (
     <div className="mb-8">
       <h2 className="text-xl font-bold mb-4">Equipos del torneo</h2>
@@ -58,7 +85,7 @@ export default function TournamentBrackets({
                   {(isCreator || isMyTeam || isAdmin) && (
                     <button
                       className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm"
-                      onClick={() => navigate(`/edit-team/${team.id}`)}
+                      onClick={() => handleEditTeam(team.id)}
                     >
                       Editar equipo
                     </button>
@@ -66,7 +93,7 @@ export default function TournamentBrackets({
                   {(isMyTeam || isCreator || isAdmin) && (
                     <button
                       className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
-                      onClick={() => onUnregisterTeam && onUnregisterTeam(team.id)}
+                      onClick={() => handleRemoveTeam(team.id)}
                     >
                       Desapuntar equipo
                     </button>

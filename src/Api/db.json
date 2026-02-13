@@ -6,6 +6,7 @@
       "sport": "futbol",
       "category": "Bajo",
       "maxTeams": 12,
+      "minTeams": 4,
       "maxPlayersPerTeam": 11,
       "minPlayersPerTeam": 7,
       "startDate": "2026-03-10",
@@ -25,6 +26,7 @@
       "sport": "baloncesto",
       "category": "Alto",
       "maxTeams": 8,
+      "minTeams": 4,
       "maxPlayersPerTeam": 12,
       "minPlayersPerTeam": 5,
       "startDate": "2026-06-01",
@@ -44,6 +46,7 @@
       "sport": "voleibol",
       "category": "Alto",
       "maxTeams": 10,
+      "minTeams": 4,
       "maxPlayersPerTeam": 12,
       "minPlayersPerTeam": 6,
       "startDate": "2026-04-15",
@@ -63,6 +66,7 @@
       "sport": "futbol",
       "category": "Medio",
       "maxTeams": 16,
+      "minTeams": 8,
       "maxPlayersPerTeam": 11,
       "startDate": "2026-12-01",
       "endDate": "2026-12-20",
@@ -81,6 +85,7 @@
       "sport": "baloncesto",
       "category": "Bajo",
       "maxTeams": 20,
+      "minTeams": 4,
       "maxPlayersPerTeam": 4,
       "startDate": "2026-07-10",
       "endDate": "2026-07-12",
@@ -99,6 +104,7 @@
       "sport": "basketball",
       "category": "medio",
       "maxTeams": 4,
+      "minTeams": 2,
       "maxPlayersPerTeam": 4,
       "minPlayersPerTeam": 3,
       "startDate": "2026-02-18",
@@ -118,6 +124,7 @@
       "sport": "futbol",
       "category": "amateur",
       "maxTeams": 8,
+      "minTeams": 4,
       "maxPlayersPerTeam": 11,
       "minPlayersPerTeam": 7,
       "startDate": "2025-10-01",
@@ -137,6 +144,7 @@
       "sport": "Fútbol",
       "category": "bajo",
       "maxTeams": 4,
+      "minTeams": 2,
       "maxPlayersPerTeam": 8,
       "minPlayersPerTeam": 5,
       "startDate": "2026-02-11",
@@ -191,17 +199,6 @@
   ],
   "teams": [
     {
-      "id": "t01",
-      "name": "Los Tigres",
-      "tournamentId": "1",
-      "captainId": 1,
-      "players": [
-        "Juan Pérez",
-        "Pedro López",
-        "Luis Gómez"
-      ]
-    },
-    {
       "id": "t02",
       "name": "Basket Madrid",
       "tournamentId": "2",
@@ -221,17 +218,6 @@
         "Carlos Ruiz",
         "Sergio",
         "Juan Pérez"
-      ]
-    },
-    {
-      "id": "aa5c",
-      "name": "Los wolfs",
-      "tournamentId": "8c9e",
-      "captainId": 1,
-      "players": [
-        "Sergio Muñoz",
-        "Paco Gonzalez",
-        "Mariano"
       ]
     },
     {
@@ -314,23 +300,23 @@
       "tournamentId": "0f41",
       "gameId": "game-r1-1",
       "round": 1,
-      "date": "2026-02-11T19:58:54.696Z",
+      "date": "2026-02-12T18:39:40.848Z",
       "homeTeamId": "73ec",
       "visitorTeamId": "d5b5",
       "homeScore": 5,
-      "visitorScore": 15,
-      "id": "ec29"
+      "visitorScore": 0,
+      "id": "f8aa"
     },
     {
+      "id": "8b15",
       "tournamentId": "0f41",
       "gameId": "game-r2-1",
       "round": 2,
-      "date": "2026-02-11T21:05:39.754Z",
-      "homeTeamId": "d5b5",
+      "date": "2026-02-12T18:39:51.735Z",
+      "homeTeamId": "73ec",
       "visitorTeamId": "04c1",
-      "homeScore": 2,
-      "visitorScore": 0,
-      "id": "0274"
+      "homeScore": 0,
+      "visitorScore": 5
     }
   ],
   "comunidades": [

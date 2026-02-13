@@ -1,6 +1,15 @@
-import Navegacion from "../Componentes/Navegacion";
+/**
+ * RegisterPage
+ * 
+ * Página de registro de usuario.
+ * - Renderiza el formulario de registro.
+ * - Incluye enlace para ir a la página de inicio de sesión si ya tienes cuenta.
+ */
+
+
+import Navegacion from "../../Componentes/Navegacion";
 import { Link } from "react-router-dom";
-import RegisterForm from "../Componentes/RegisterForm";
+import RegisterForm from "../../Componentes/LoginComponentes/RegisterForm";
 
 export default function RegisterPage() {
   return (

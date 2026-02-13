@@ -12,13 +12,13 @@ export function getTournamentStatus(tournament: Tournament, teams: Team[]) {
 
   // Si el torneo está en curso (entre inicio y fin)
   if (now >= start && now <= end) {
-    // Si las plazas están llenas, pero aún no ha terminado, está "en curso"
-    if (inscritos >= tournament.maxTeams) return "inprogress";
-    // Si la fecha de inicio ya pasó, está "en curso"
     return "inprogress";
   }
 
-  // Si aún no empieza
+  // Si aún no empieza pero está lleno
+  if (now < start && inscritos >= tournament.maxTeams) return "closed";
+
+  // Si aún no empieza y no está lleno
   if (now < start) return "open";
 
   return "open";

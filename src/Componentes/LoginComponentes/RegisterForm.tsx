@@ -1,8 +1,13 @@
+/**
+ * RegisterForm
+ * 
+ * Formulario de registro de usuario.
+ */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { userService } from "../services/userServices";
+import { userService } from "../../services/userServices";
 
 export type RegisterFormValues = {
   name: string;
@@ -21,6 +26,7 @@ interface RegisterFormProps {
   onSubmitForm?: (data: RegisterFormValues) => Promise<void>;
 }
 
+// Esquema de validación con yup
 const schema: yup.ObjectSchema<RegisterFormValues> = yup.object({
   name: yup.string().required("El nombre es obligatorio").matches(/^[^\d]+$/, "El nombre no puede contener números"),
   email: yup.string().required("El email es obligatorio").email("El email no es válido"),
@@ -29,6 +35,9 @@ const schema: yup.ObjectSchema<RegisterFormValues> = yup.object({
   role: yup.string().oneOf(["usuario", "admin"]).required(),
 });
 
+/**
+ * Componente principal del formulario de registro.
+ */
 const RegisterForm: React.FC<RegisterFormProps> = ({
   showRoleField = false,
   defaultRole = "usuario",
@@ -37,6 +46,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   initialValues,
   onSubmitForm,
 }) => {
+  // Hook de formulario con validación
   const {
     register,
     handleSubmit,
@@ -51,16 +61,23 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
   const [success, setSuccess] = useState<string | null>(null);
 
+  // Si hay valores iniciales, los carga en el formulario
   useEffect(() => {
     if (initialValues) reset(initialValues);
   }, [initialValues, reset]);
 
+  /**
+   * Devuelve la clase CSS del input según si hay error o está tocado.
+   */
   const getInputClass = (field: keyof RegisterFormValues) => {
     if (errors[field]) return "border-red-500";
     if (touchedFields[field] && !errors[field]) return "border-green-500";
     return "border-gray-300";
   };
 
+  /**
+   * Maneja el envío del formulario.
+   */
   const onSubmit = async (data: RegisterFormValues) => {
     setSuccess(null);
 
@@ -89,6 +106,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     else setSuccess("¡Registro exitoso!");
   };
 
+  // Render principal del formulario
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>

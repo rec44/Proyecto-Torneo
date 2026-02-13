@@ -1,18 +1,30 @@
+/**
+ * UserMatchHistory
+ * 
+ * Muestra el historial de partidos jugados por un usuario, junto con el número de torneos en los que ha participado y los que ha ganado.
+ *
+ */
+
 import { useMemo } from "react";
-import { useMatches } from "../hooks/useMatches";
-import { useTeams } from "../hooks/useTeams";
-import { useTournaments } from "../hooks/useTournaments";
+import { useMatches } from "../../hooks/useMatches";
+import { useTeams } from "../../hooks/useTeams";
+import { useTournaments } from "../../hooks/useTournaments";
 
 interface Props {
   userId: string;
 }
 
+/**
+ * Componente principal que renderiza el historial de partidos del usuario.
+ */
 export default function UserMatchHistory({ userId }: Props) {
   const { matches, loading, error } = useMatches();
   const { teams } = useTeams();
   const { tournaments } = useTournaments();
 
-  // Encuentra los equipos donde el usuario es jugador o capitán
+  /**
+   * Obtiene los equipos donde el usuario es capitán o jugador.
+   */
   const userTeams = teams.filter(
     team =>
       String(team.captainId) === userId ||
@@ -20,7 +32,9 @@ export default function UserMatchHistory({ userId }: Props) {
   );
   const teamIds = userTeams.map(team => String(team.id));
 
-  // Filtra los partidos donde el usuario ha jugado
+  /**
+   * Filtra los partidos donde el usuario ha jugado y los ordena por fecha descendente.
+   */
   const userMatches = useMemo(
     () =>
       matches
@@ -37,7 +51,9 @@ export default function UserMatchHistory({ userId }: Props) {
     [matches, teamIds]
   );
 
-  // Torneos en los que ha participado
+  /**
+   * Calcula los torneos en los que ha participado el usuario.
+   */
   const tournamentsPlayed = useMemo(() => {
     const ids = new Set(
       userMatches.map(match => match.tournamentId)
@@ -45,7 +61,10 @@ export default function UserMatchHistory({ userId }: Props) {
     return Array.from(ids);
   }, [userMatches]);
 
-  // Torneos ganados: busca el último partido de cada torneo y mira si su equipo ganó
+  /**
+   * Calcula los torneos ganados por el usuario.
+   * Busca el último partido de cada torneo y comprueba si su equipo ganó.
+   */
   const tournamentsWon = useMemo(() => {
     let won = 0;
     tournamentsPlayed.forEach(tournamentId => {
@@ -68,6 +87,9 @@ export default function UserMatchHistory({ userId }: Props) {
     return won;
   }, [matches, tournamentsPlayed, teamIds]);
 
+  /**
+   * Construye las filas de la tabla con los datos de cada partido.
+   */
   const rows = useMemo(
     () =>
       userMatches.map(match => {
@@ -95,9 +117,11 @@ export default function UserMatchHistory({ userId }: Props) {
     [userMatches, tournaments, teams, teamIds]
   );
 
+  // Muestra mensaje de carga o error si aplica
   if (loading) return <div className="p-4 text-gray-500">Cargando historial…</div>;
   if (error) return <div className="p-4 text-red-600">No se pudo cargar el historial.</div>;
 
+  // Render principal
   return (
     <div className="bg-white rounded-2xl shadow p-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">

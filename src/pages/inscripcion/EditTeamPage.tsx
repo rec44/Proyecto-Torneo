@@ -1,12 +1,20 @@
+/**
+ * EditTeamPage
+ * 
+ * Página para editar un equipo inscrito en un torneo.
+ * - Carga los datos del equipo y del torneo correspondiente.
+ * - Muestra el formulario de edición de equipo.
+ */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Navegacion from "../Componentes/Navegacion";
-import InscripcionEquipoForm from "../Componentes/InscripcionEquipoForm";
-import { teamService } from "../services/teamService";
-import { tournamentService } from "../services/tournamentService";
-import { useTeams } from "../hooks/useTeams"; // <-- Importa el hook
-import type { Team } from "../types/team";
-import type { Tournament } from "../types/tournament";
+import Navegacion from "../../Componentes/Navegacion";
+import InscripcionEquipoForm from "../../Componentes/TournamentsComponentes/InscripcionEquipoForm";
+import { teamService } from "../../services/teamService";
+import { tournamentService } from "../../services/tournamentService";
+import { useTeams } from "../../hooks/useTeams";
+import type { Team } from "../../types/team";
+import type { Tournament } from "../../types/tournament";
+import Swal from "sweetalert2";
 
 export default function EditTeam() {
   const { id } = useParams();
@@ -15,8 +23,9 @@ export default function EditTeam() {
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { teams, loading: loadingTeams } = useTeams(); // <-- Usa el hook
+  const { teams, loading: loadingTeams } = useTeams();
 
+  // Al montar, carga el equipo y el torneo correspondiente
   useEffect(() => {
     async function load() {
       try {
@@ -38,6 +47,7 @@ export default function EditTeam() {
     load();
   }, [id]);
 
+  // Muestra mensaje de carga si los datos no están listos
   if (loading || loadingTeams) {
     return (
       <>
@@ -47,6 +57,7 @@ export default function EditTeam() {
     );
   }
 
+  // Muestra mensaje de error si no hay datos suficientes
   if (error || !team || !tournament) {
     return (
       <>
@@ -58,11 +69,31 @@ export default function EditTeam() {
     );
   }
 
+  /**
+   * Handler para mostrar SweetAlert y volver atrás tras guardar cambios.
+   */
+  const handleSuccess = async () => {
+    await Swal.fire({
+      icon: "success",
+      title: "Equipo actualizado correctamente",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+    navigate(-1);
+  };
+
+  // Render principal: formulario de edición de equipo y botón volver
   return (
     <>
       <Navegacion />
       <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-lg">
+          <button
+            className="mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded"
+            onClick={() => navigate(-1)}
+          >
+            ← Volver
+          </button>
           <h1 className="text-2xl font-bold text-center text-blue-700 mb-6">Editar equipo</h1>
           <InscripcionEquipoForm
             tournament={tournament}
@@ -70,7 +101,7 @@ export default function EditTeam() {
             equiposInscritos={teams.filter(eq => eq.tournamentId === tournament.id)}
             mode="edit"
             submitLabel="Guardar cambios"
-            onSuccess={() => navigate(-1)}
+            onSuccess={handleSuccess}
           />
         </div>
       </div>

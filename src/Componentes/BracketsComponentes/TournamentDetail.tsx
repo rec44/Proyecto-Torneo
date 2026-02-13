@@ -1,6 +1,11 @@
-import type { Tournament } from "../types/tournament";
-import type { Team } from "../types/team";
-import { getTournamentStatus } from "../utils/getTournamentStatus";
+/**
+ * TournamentDetail
+ * 
+ * Muestra la información detallada de un torneo y permite acciones según permisos.
+ */
+import type { Tournament } from "../../types/tournament";
+import type { Team } from "../../types/team";
+import { getTournamentStatus } from "../../utils/getTournamentStatus";
 
 const statusMap: Record<string, string> = {
   open: "Abierto",
@@ -16,14 +21,6 @@ const statusColorMap: Record<string, string> = {
   inprogress: "bg-blue-200 text-blue-800",
 };
 
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  const d = String(date.getDate()).padStart(2, "0");
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const y = date.getFullYear();
-  return `${d}/${m}/${y}`;
-}
-
 interface Props {
   tournament: Tournament;
   teams: Team[];
@@ -38,23 +35,35 @@ interface Props {
   isUserJoined?: boolean;
 }
 
+/**
+ * Renderiza el detalle del torneo, equipos y botones de acción.
+ */
 export default function TournamentDetail({
   tournament,
   teams,
   canEdit,
   canDelete,
   canJoin,
+  isUserJoined,
   onEdit,
   onDelete,
   onJoin,
-  isUserJoined,
 }: Props) {
-  const progress = Math.min(
-    100,
-    Math.round(((teams?.length || 0) / tournament.maxTeams) * 100)
-  );
+  // Calcula el progreso de equipos inscritos
+  const progress =
+    teams && tournament.maxTeams
+      ? Math.min((teams.length / tournament.maxTeams) * 100, 100)
+      : 0;
   const status = getTournamentStatus(tournament, teams);
 
+  /**
+   * Formatea la fecha a string legible.
+   */
+  function formatDate(date: string) {
+    return new Date(date).toLocaleDateString();
+  }
+
+  // Render principal
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-6">
       <div className="flex items-center justify-between mb-2">
@@ -92,6 +101,10 @@ export default function TournamentDetail({
           </p>
           <p className="text-gray-700">
             Máx. equipos: <span className="font-semibold">{tournament.maxTeams}</span>
+          </p>
+          <p className="text-gray-700">
+            <span>Mín. equipos torneo: </span>
+            <span className="font-semibold">{tournament.minTeams}</span>
           </p>
           <p className="text-gray-700">
             Máx. jugadores por equipo:{" "}

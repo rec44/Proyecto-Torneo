@@ -1,3 +1,13 @@
+/**
+ * TournamentDetailPage
+ * 
+ * Página de detalle de un torneo.
+ * - Carga los datos del torneo por ID de la URL.
+ * - Muestra la información detallada del torneo y los equipos inscritos.
+ * - Permite editar o eliminar el torneo si el usuario tiene permisos.
+ * - Permite inscribir un equipo si el torneo está abierto y el usuario no está inscrito.
+ */
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navegacion from "../Componentes/Navegacion";
@@ -8,7 +18,7 @@ import { getTournamentStatus } from "../utils/getTournamentStatus";
 import { useTeams } from "../hooks/useTeams";
 import type { Tournament } from "../types/tournament";
 import Swal from "sweetalert2";
-import TournamentDetail from "../Componentes/TournamentDetail"; // Asegúrate de importar el componente correcto
+import TournamentDetail from "../Componentes/BracketsComponentes/TournamentDetail";
 
 export default function TournamentDetailPage() {
   const { id } = useParams();
@@ -22,6 +32,7 @@ export default function TournamentDetailPage() {
   // Comprueba si el usuario es capitán de algún equipo en este torneo
   const isUserJoined = teams.some((team) => team.captainId === user?.id);
 
+  // Carga los datos del torneo al montar o cambiar el id
   useEffect(() => {
     async function load() {
       try {
@@ -38,6 +49,7 @@ export default function TournamentDetailPage() {
     if (id) load();
   }, [id]);
 
+  // Muestra mensaje de carga mientras se obtienen los datos
   if (loading) {
     return (
       <>
@@ -49,6 +61,7 @@ export default function TournamentDetailPage() {
     );
   }
 
+  // Muestra mensaje de error si no se encuentra el torneo
   if (error || !tournament) {
     return (
       <>
@@ -66,13 +79,22 @@ export default function TournamentDetailPage() {
     );
   }
 
+  // Calcula el estado del torneo y permisos de gestión
   const status = getTournamentStatus(tournament, teams);
   const canManage = user && (user.role === "admin" || user.id === tournament.ownerId);
 
+  /**
+   * Navega a la página de edición del torneo.
+   */
   const handleEditTournament = () => {
     navigate(`/edit-tournament/${tournament.id}`);
   };
 
+  /**
+   * Elimina el torneo y todos sus equipos inscritos.
+   * - Muestra confirmación antes de eliminar.
+   * - Si hay error, muestra alerta.
+   */
   const handleDeleteTournament = async () => {
     const result = await Swal.fire({
       title: "¿Estás seguro?",
@@ -106,6 +128,7 @@ export default function TournamentDetailPage() {
     }
   };
 
+  // Render principal: muestra el detalle del torneo y acciones disponibles
   return (
     <>
       <Navegacion />

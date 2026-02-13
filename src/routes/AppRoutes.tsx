@@ -1,20 +1,20 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
+import LoginPage from "../pages/Login/LoginPage";
+import RegisterPage from "../pages/Login/RegisterPage";
 import TournamentDetail from "../pages/TournamentDetailPage";
 import CreateTournamentPage from "../pages/CreateTournamentPage";
 import HomePage from "../pages/HomePage"; 
 import { ProtectedRoute } from "./ProtectedRoute";
 import MyTournamentsPage from "../pages/MyTournamentsPage";
 import MyProfilePage from "../pages/MyProfilePage";
-import InscripcionEquipoPage from "../pages/InscripcionEquipoPage";
+import InscripcionEquipoPage from "../pages/inscripcion/InscripcionEquipoPage";
 import AdminPanelPage from "../pages/admin/AdminPanelPage";
 import EditTournamentPage from "../pages/EditTournamentPage";
 import CreateUserPage from "../pages/admin/CreateUserPage";
 import { AdminRoute } from "./AdminRoute";
 import EditUserPage from "../pages/admin/EditUserPage";
 import TournamentBracketsPage from "../pages/TournamentBracketsPage";
-import EditTeam from "../pages/EditTeamPage";
+import EditTeam from "../pages/inscripcion/EditTeamPage";
 
 export default function AppRoutes() {
   return (
@@ -24,6 +24,7 @@ export default function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
+      {/* Rutas protegidas */}
       <Route element={<ProtectedRoute />}>
         <Route path="/create-tournament" element={<CreateTournamentPage />} />
         <Route path="/MyTournaments/:id" element={<MyTournamentsPage />} />

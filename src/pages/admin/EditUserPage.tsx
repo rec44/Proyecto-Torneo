@@ -1,16 +1,24 @@
+/**
+ * EditUserPage
+ * 
+ * Página para editar un usuario existente desde el panel de administración.
+ * - Carga los datos del usuario por ID.
+ * - Muestra el formulario de registro en modo edición.
+ */
 import Navegacion from "../../Componentes/Navegacion";
-import RegisterForm from "../../Componentes/RegisterForm";
+import RegisterForm from "../../Componentes/LoginComponentes/RegisterForm";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { userService } from "../../services/userServices";
-import type { RegisterFormValues } from "../../Componentes/RegisterForm";
+import type { RegisterFormValues } from "../../Componentes/LoginComponentes/RegisterForm";
 
 export default function EditUserPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [user, setUser] = useState<RegisterFormValues | null>(null);
 
+  // Al montar, carga los datos del usuario a editar
   useEffect(() => {
     userService.getById(id).then(u => {
       if (u) {
@@ -25,6 +33,7 @@ export default function EditUserPage() {
     });
   }, [id]);
 
+  // Muestra confirmación y redirige tras editar
   const handleSuccess = () => {
     Swal.fire({
       icon: "success",
@@ -34,6 +43,7 @@ export default function EditUserPage() {
     }).then(() => navigate("/admin"));
   };
 
+  // Maneja el envío del formulario de edición
   const handleEdit = async (data: RegisterFormValues) => {
     if (!id) return;
     await userService.update(id, {
@@ -47,6 +57,7 @@ export default function EditUserPage() {
 
   if (!user) return <div>Cargando usuario...</div>;
 
+  // Render principal
   return (
     <>
       <Navegacion />
